@@ -1,4 +1,5 @@
 package com.example.recruitment.dto.in;
+import com.example.recruitment.annotation.PhoneNumber;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class EmployerDtoIn {
     @Positive(message = "Must be positive")
     private Integer provinceId;
 
+    @PhoneNumber
     private String description;
 
 

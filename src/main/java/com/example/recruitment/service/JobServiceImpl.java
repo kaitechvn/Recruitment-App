@@ -18,6 +18,7 @@ import com.example.recruitment.repository.JobRepository;
 import com.example.recruitment.repository.ProvinceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +45,7 @@ public class JobServiceImpl implements JobService {
   @Autowired
   private EmployerRepository employerRepository;
 
-  @Cacheable("jobs")
+  @Cacheable(value = "jobs", key = "#id")
   @Override
   public CommonDtoOut<JobDtoOut> get(Integer id) {
       Job job = this.jobRepository.findById(id)
@@ -77,6 +78,7 @@ public class JobServiceImpl implements JobService {
     }
   }
 
+  @CachePut(value = "jobs", key = "#id")
   @Override
   public CommonDtoOut<JobDtoOut> update(Integer id, JobDtoIn dto) {
     Job updatingJob = this.jobRepository.findById(id)

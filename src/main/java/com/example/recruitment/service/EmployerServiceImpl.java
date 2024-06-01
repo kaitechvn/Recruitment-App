@@ -35,7 +35,7 @@ public class EmployerServiceImpl implements EmployerService {
     public CommonDtoOut<EmployerDtoOut> get(Integer id) {
       Employer employer = this.employerRepository.findById(id)
         .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));
-        System.out.println("Method invoked to fetch employer with id: " + id);
+//        System.out.println("Method invoked to fetch employer with id: " + id);
         return CommonDtoOut.success(EmployerDtoOut.fromEmployer(employer));
     }
 

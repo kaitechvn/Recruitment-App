@@ -51,7 +51,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     // getSupportedMethod return Array String
     String supportedMethods = ex.getSupportedMethods() == null ? null : String.join(",", ex.getSupportedMethods());
     String msg = String.format("Method not supported: %s, support %s", ex.getMethod(), supportedMethods);
-    logger.debug("4xx Error");
+    logger.debug("Request error: Method not supported");
     return responseEntity(ErrorCode.METHOD_NOT_ALLOWED, status, msg);
   }
 
@@ -63,7 +63,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     String msg = String.format("MediaType not supported: %s, only support %s", ex.getContentType(),
       supportedContentTypes);
-    logger.debug("4xx Error");
+    logger.debug("Request error: MediaType not supported");
     return responseEntity(ErrorCode.UNSUPPORTED_MEDIA_TYPE, status, msg);
   }
 
@@ -129,7 +129,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     logger.debug("4xx Error");
     return responseEntity(ErrorCode.BAD_REQUEST, status, msg);
   }
-
-
-
 }
+
+//  @ExceptionHandler({ AuthenticationException.class })
+//  public ResponseEntity<Object> handleAuthenticationException(Exception ex) {
+//
+//    return responseEntity(ErrorCode.UNAUTHORIZED, HttpStatus.UNAUTHORIZED, ex.getMessage());
+//  }
+//
+//}
