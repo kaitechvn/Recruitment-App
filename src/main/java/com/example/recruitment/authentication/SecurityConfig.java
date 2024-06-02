@@ -19,6 +19,8 @@ import org.springframework.security.converter.RsaKeyConverters;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -27,11 +29,14 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.sql.DataSource;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -39,10 +44,13 @@ import java.security.interfaces.RSAPublicKey;
 @Log4j2
 
 public class SecurityConfig {
+  @Autowired
+  private DataSource dataSource;
 
   @Autowired
   @Qualifier("customEntryPoint")
   AuthenticationEntryPoint authEntryPoint;
+
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -90,16 +98,16 @@ public class SecurityConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER")
-      .build();
-
-    return new InMemoryUserDetailsManager(user);
+    JdbcDaoImpl jdbcDao = new JdbcDaoImpl();
+    jdbcDao.setDataSource(dataSource); // Set the data source
+    return jdbcDao;
   }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    return new BCryptPasswordEncoder();
   }
+
 //    @Bean
 //    public JwtAuthenticationConverter jwtAuthenticationConverter() {
 //      JwtAuthenticationConverter converter = new JwtAuthenticationConverter();

@@ -15,7 +15,6 @@ import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
-import javax.sql.RowSet;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -44,11 +43,11 @@ public class AuthServiceImpl implements AuthService {
     try {
       userDetails = this.userDetailsService.loadUserByUsername(loginDtoIn.getUsername());
     } catch (UsernameNotFoundException e) {
-      throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "invalid credentials");
+      throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "username not found");
     }
 
     if (!passwordEncoder.matches(loginDtoIn.getPassword(), userDetails.getPassword())) {
-      throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "invalid credentials");
+      throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "wrong password");
     }
 
     return AuthLoginDtoOut.builder()
@@ -61,9 +60,13 @@ public class AuthServiceImpl implements AuthService {
       long exp = iat + Duration.ofHours(8).toSeconds();
 
       JwtEncoderParameters parameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(),
-        JwtClaimsSet.builder().subject(username).issuedAt(Instant.ofEpochSecond(iat))
-          .expiresAt(Instant.ofEpochSecond(exp)).claim("user_name", username)
+        JwtClaimsSet.builder()
+          .subject("recruitment")
+          .issuedAt(Instant.ofEpochSecond(iat))
+          .expiresAt(Instant.ofEpochSecond(exp))
+          .claim("user_name", username)
           .claim("scope", List.of("ADMIN")).build());
+
       try {
         return jwtEncoder.encode(parameters).getTokenValue();
       } catch (JwtEncodingException e) {
