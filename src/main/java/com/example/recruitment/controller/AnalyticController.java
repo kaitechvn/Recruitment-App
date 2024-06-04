@@ -1,20 +1,20 @@
-package com.example.recruitment.analytic;
+package com.example.recruitment.controller;
 
+import com.example.recruitment.dto.out.analytic.Analytic;
+import com.example.recruitment.service.AnalyticServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 @RestController
-public class Controller {
+public class AnalyticController {
 
   @Autowired
-  private AnalyticService analyticService;
+  private AnalyticServiceImpl analyticService;
 
   @GetMapping("/analytic")
   public Analytic getAnalytic(@RequestParam("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,

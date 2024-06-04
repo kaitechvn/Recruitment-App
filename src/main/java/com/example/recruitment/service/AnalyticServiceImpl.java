@@ -1,13 +1,15 @@
-package com.example.recruitment.analytic;
+package com.example.recruitment.service;
 
+import com.example.recruitment.dto.out.analytic.Analytic;
+import com.example.recruitment.repository.AnalyticRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
-public class AnalyticService {
+public class AnalyticServiceImpl implements AnalyticService {
+
   @Autowired
   private AnalyticRepository analyticRepository;
 

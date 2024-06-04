@@ -1,7 +1,12 @@
-package com.example.recruitment.analytic;
+package com.example.recruitment.repository;
 
-import jakarta.persistence.TemporalType;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.example.recruitment.dto.out.analytic.Analytic;
+import com.example.recruitment.dto.out.analytic.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -87,4 +92,30 @@ public class AnalyticRepository {
 
     return analytic;
   }
+
+  public class AnalyticRowMapper implements RowMapper<Analytic> {
+    @Override
+    public Analytic mapRow(ResultSet rs, int rowNum) throws SQLException {
+      Analytic analytic = new Analytic();
+      analytic.setNumEmployer(rs.getInt("employer_count"));
+      analytic.setNumJob(rs.getInt("job_count"));
+      analytic.setNumSeeker(rs.getInt("seeker_count"));
+      analytic.setNumResume(rs.getInt("resume_count"));
+      return analytic;
+    }
+  }
+
+  public class ElementRowMapper implements RowMapper<Element> {
+    @Override
+    public Element mapRow(ResultSet rs, int rowNum) throws SQLException {
+      Element element = new Element();
+      element.setDate(rs.getDate("date"));
+      element.setNumEmployer(rs.getInt("employer_count"));
+      element.setNumJob(rs.getInt("job_count"));
+      element.setNumSeeker(rs.getInt("seeker_count"));
+      element.setNumResume(rs.getInt("resume_count"));
+      return element;
+    }
+  }
+
 }
