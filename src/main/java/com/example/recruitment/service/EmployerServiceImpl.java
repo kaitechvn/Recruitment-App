@@ -32,55 +32,56 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Cacheable(value = "employers", key = "#id")
     @Override
-    public CommonDtoOut<EmployerDtoOut> get(Integer id) {
+    public EmployerDtoOut get(Integer id) {
       Employer employer = this.employerRepository.findById(id)
         .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));
+
+      EmployerDtoOut employerDtoOut = EmployerDtoOut.fromEmployer(employer);
 //        System.out.println("Method invoked to fetch employer with id: " + id);
-        return CommonDtoOut.success(EmployerDtoOut.fromEmployer(employer));
+        return employerDtoOut;
     }
 
     @Override
-    public CommonDtoOut<EmployerDtoOut> create(EmployerDtoIn dto) {
+    public EmployerDtoOut create(EmployerDtoIn dto) {
         this.employerRepository.findByEmail(dto.getEmail()).ifPresent(check -> {
         throw new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "email already existed");
       });
 
         Employer addEmployer = this.employerRepository.save(Employer.fromDto(dto));
-        EmployerDtoOut toDtoOut = EmployerDtoOut.fromEmployer(addEmployer);
-        return CommonDtoOut.create(toDtoOut);
+        EmployerDtoOut employerDtoOut = EmployerDtoOut.fromEmployer(addEmployer);
+        return employerDtoOut;
     }
 
     @CachePut(value = "employers", key = "#id")
     @Override
-    public CommonDtoOut<EmployerDtoOut> update(Integer id, UpdateEmployerDtoIn dto) {
+    public EmployerDtoOut update(Integer id, UpdateEmployerDtoIn dto) {
       Employer updatingEmployer = this.employerRepository.findById(id)
         .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));
 
       Update.copyIgnoreNull(dto, updatingEmployer); // not null field update
       Employer toUpdateEmployer = this.employerRepository.save(updatingEmployer);
-      EmployerDtoOut toDtoOut = EmployerDtoOut.fromEmployer(toUpdateEmployer);
-      return CommonDtoOut.success(toDtoOut);
+      EmployerDtoOut employerDtoOut = EmployerDtoOut.fromEmployer(toUpdateEmployer);
+      return employerDtoOut;
 
     }
 
     @CacheEvict(value = "employers", key = "#id")
     @Override
-    public CommonDtoOut<EmployerDtoOut> delete(Integer id) {
+    public EmployerDtoOut delete(Integer id) {
       Employer employer = this.employerRepository.findById(id)
         .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));
 
-      EmployerDtoOut toDtoOut = EmployerDtoOut.fromEmployer(employer);
+      EmployerDtoOut employerDtoOut = EmployerDtoOut.fromEmployer(employer);
       this.employerRepository.delete(employer);
-      return CommonDtoOut.success(toDtoOut);
+      return employerDtoOut;
     }
 
     @Override
-    public CommonDtoOut<PageDtoOut<DataEmployer>> list(PageEmployerDtoIn dto) {
+    public PageDtoOut<DataEmployer> list(PageEmployerDtoIn dto) {
         Pageable paging = PageRequest.of(dto.getPage() - 1, dto.getPageSize(), Sort.by("name").ascending());
         Page<Employer> pagedResult = this.employerRepository.findAll(paging);
-        return CommonDtoOut.success(
-          PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
-                        pagedResult.stream().map(DataEmployer::fromEmployer).toList()));
+        return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
+                        pagedResult.stream().map(DataEmployer::fromEmployer).toList());
         }
     }
 

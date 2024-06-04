@@ -22,7 +22,7 @@ public class JobController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<CommonDtoOut<JobDtoOut>> get(@PathVariable("id") Integer id) {
-    CommonDtoOut<JobDtoOut> dtoOut = this.jobService.get(id);
+    CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.success(this.jobService.get(id));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf((dtoOut.getStatusCode()))
     );
@@ -30,7 +30,7 @@ public class JobController {
 
   @GetMapping()
   public ResponseEntity<CommonDtoOut<PageDtoOut<DataJob>>> list(@Valid PageJobDtoIn dto){
-    CommonDtoOut<PageDtoOut<DataJob>> dtoOut = this.jobService.list(dto);
+    CommonDtoOut<PageDtoOut<DataJob>> dtoOut = CommonDtoOut.success(this.jobService.list(dto));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );
@@ -38,7 +38,7 @@ public class JobController {
 
   @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public ResponseEntity<CommonDtoOut<JobDtoOut>> create(@Valid @RequestBody JobDtoIn dto) {
-    CommonDtoOut<JobDtoOut> dtoOut  = this.jobService.create(dto);
+    CommonDtoOut<JobDtoOut> dtoOut  = CommonDtoOut.create(this.jobService.create(dto));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );
@@ -46,7 +46,7 @@ public class JobController {
 
   @PutMapping("{id}")
   public ResponseEntity<CommonDtoOut<JobDtoOut>> update(@PathVariable("id") Integer id, @RequestBody JobDtoIn dto) {
-    CommonDtoOut<JobDtoOut> dtoOut = this.jobService.update(id, dto);
+    CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.success(jobService.update(id, dto));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );
@@ -54,7 +54,7 @@ public class JobController {
 
   @DeleteMapping("{id}")
   public ResponseEntity<CommonDtoOut<JobDtoOut>> delete(@PathVariable("id") Integer id) {
-    CommonDtoOut<JobDtoOut> dtoOut = this.jobService.delete(id);
+    CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.success(jobService.delete(id));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );

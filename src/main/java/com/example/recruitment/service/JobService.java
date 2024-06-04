@@ -8,10 +8,10 @@ import com.example.recruitment.dto.out.pagedata.DataJob;
 import com.example.recruitment.dto.out.JobDtoOut;
 
 public interface JobService {
-  CommonDtoOut<JobDtoOut> get(Integer id);
-  CommonDtoOut<JobDtoOut> create(JobDtoIn dto);
-  CommonDtoOut<JobDtoOut> update(Integer id, JobDtoIn dto);
-  CommonDtoOut<JobDtoOut> delete(Integer id);
-  CommonDtoOut<PageDtoOut<DataJob>> list(PageJobDtoIn dto);
+  JobDtoOut get(Integer id);
+  JobDtoOut create(JobDtoIn dto);
+  JobDtoOut update(Integer id, JobDtoIn dto);
+  JobDtoOut delete(Integer id);
+  PageDtoOut<DataJob> list(PageJobDtoIn dto);
 
 }

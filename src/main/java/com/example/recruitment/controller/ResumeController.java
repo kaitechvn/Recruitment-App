@@ -23,7 +23,7 @@ public class ResumeController {
 
   @GetMapping("{id}")
   public ResponseEntity<CommonDtoOut<ResumeDtoOut>> get(@PathVariable("id") Integer id) {
-    CommonDtoOut<ResumeDtoOut> dtoOut = this.resumeService.get(id);
+    CommonDtoOut<ResumeDtoOut> dtoOut = CommonDtoOut.success(resumeService.get(id));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );
@@ -31,25 +31,25 @@ public class ResumeController {
 
   @PostMapping
   public ResponseEntity<CommonDtoOut<ResumeDtoOut>> create(@RequestBody ResumeDtoIn dtoIn) {
-    CommonDtoOut<ResumeDtoOut> dtoOut = this.resumeService.create(dtoIn);
+    CommonDtoOut<ResumeDtoOut> dtoOut = CommonDtoOut.create(resumeService.create(dtoIn));
     return new ResponseEntity<>(dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode()));
   }
 
   @PutMapping("{id}")
   public ResponseEntity<CommonDtoOut<ResumeDtoOut>> update(@PathVariable("id") Integer id, @RequestBody UpdateResumeDtoIn dtoIn) {
-    CommonDtoOut<ResumeDtoOut> dtoOut = this.resumeService.update(id, dtoIn);
+    CommonDtoOut<ResumeDtoOut> dtoOut = CommonDtoOut.success(resumeService.update(id, dtoIn));
     return new ResponseEntity<>(dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode()));
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity<CommonDtoOut<ResumeDtoOut>> delete(@PathVariable("id") Integer id) {
-    CommonDtoOut<ResumeDtoOut> dtoOut = this.resumeService.delete(id);
+    CommonDtoOut<ResumeDtoOut> dtoOut = CommonDtoOut.success(resumeService.delete(id));
     return new ResponseEntity<>(dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode()));
   }
 
   @GetMapping()
   public ResponseEntity<CommonDtoOut<PageDtoOut<DataResume>>> list(@Valid PageResumeDtoIn dto){
-    CommonDtoOut<PageDtoOut<DataResume>> dtoOut = this.resumeService.list(dto);
+    CommonDtoOut<PageDtoOut<DataResume>> dtoOut = CommonDtoOut.success(this.resumeService.list(dto));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );

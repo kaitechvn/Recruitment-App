@@ -5,7 +5,6 @@ import com.example.recruitment.common.exception.ApiException;
 import com.example.recruitment.dto.in.AuthLoginDtoIn;
 import com.example.recruitment.dto.out.AuthLoginDtoOut;
 import lombok.extern.log4j.Log4j2;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

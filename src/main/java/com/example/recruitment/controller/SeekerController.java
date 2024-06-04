@@ -22,7 +22,7 @@ public class SeekerController {
 
   @GetMapping("{id}")
   public ResponseEntity<CommonDtoOut<SeekerDtoOut>> get(@PathVariable("id") Integer id) {
-    CommonDtoOut<SeekerDtoOut> dtoOut = this.seekerService.get(id);
+    CommonDtoOut<SeekerDtoOut> dtoOut = CommonDtoOut.success(seekerService.get(id));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );
@@ -30,25 +30,25 @@ public class SeekerController {
 
   @PostMapping
   public ResponseEntity<CommonDtoOut<SeekerDtoOut>> create(@RequestBody SeekerDtoIn dtoIn) {
-    CommonDtoOut<SeekerDtoOut> dtoOut = this.seekerService.create(dtoIn);
+    CommonDtoOut<SeekerDtoOut> dtoOut = CommonDtoOut.create(seekerService.create(dtoIn));
     return new ResponseEntity<>(dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode()));
   }
 
   @PutMapping("{id}")
   public ResponseEntity<CommonDtoOut<SeekerDtoOut>> update(@PathVariable("id") Integer id, @RequestBody SeekerDtoIn dtoIn) {
-    CommonDtoOut<SeekerDtoOut> dtoOut = this.seekerService.update(id, dtoIn);
+    CommonDtoOut<SeekerDtoOut> dtoOut = CommonDtoOut.success(seekerService.update(id, dtoIn));
     return new ResponseEntity<>(dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode()));
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity<CommonDtoOut<SeekerDtoOut>> delete(@PathVariable("id") Integer id) {
-    CommonDtoOut<SeekerDtoOut> dtoOut = this.seekerService.delete(id);
+    CommonDtoOut<SeekerDtoOut> dtoOut = CommonDtoOut.success(seekerService.delete(id));
     return new ResponseEntity<>(dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode()));
   }
 
   @GetMapping()
   public ResponseEntity<CommonDtoOut<PageDtoOut<DataSeeker>>> list(@Valid PageSeekerDtoIn dto){
-    CommonDtoOut<PageDtoOut<DataSeeker>> dtoOut = this.seekerService.list(dto);
+    CommonDtoOut<PageDtoOut<DataSeeker>> dtoOut = CommonDtoOut.success(seekerService.list(dto));
     return new ResponseEntity<>(
       dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
     );

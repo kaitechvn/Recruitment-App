@@ -1,7 +1,6 @@
 package com.example.recruitment.service;
 
 import com.example.recruitment.common.data_transform.Update;
-import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.common.error.ErrorCode;
 import com.example.recruitment.common.error.ServiceValid;
@@ -44,16 +43,15 @@ public class ResumeServiceImpl implements ResumeService {
   private SeekerRepository seekerRepository;
 
   @Override
-  public CommonDtoOut<ResumeDtoOut> get(Integer id) {
+  public ResumeDtoOut get(Integer id) {
     Resume resume= this.resumeRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "resume not found"));
 
-    return CommonDtoOut.success(ResumeDtoOut.fromResume(resume));
-
+    return ResumeDtoOut.fromResume(resume);
   }
 
   @Override
-  public CommonDtoOut<ResumeDtoOut> create(ResumeDtoIn dto) {
+  public ResumeDtoOut create(ResumeDtoIn dto) {
     String errorMessage = ServiceValid.validateIds(
       dto.getProvinceIds(),
       dto.getFieldIds(),
@@ -68,13 +66,13 @@ public class ResumeServiceImpl implements ResumeService {
       throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, errorMessage);
     } else {
       Resume newResume = this.resumeRepository.save(Resume.fromDto(dto));
-      ResumeDtoOut resumeOut = ResumeDtoOut.fromResume(newResume);
-      return CommonDtoOut.create(resumeOut);
+      ResumeDtoOut resumeDtoOut = ResumeDtoOut.fromResume(newResume);
+      return resumeDtoOut;
     }
   }
 
   @Override
-  public CommonDtoOut<ResumeDtoOut> update(Integer id, UpdateResumeDtoIn dto) {
+  public ResumeDtoOut update(Integer id, UpdateResumeDtoIn dto) {
     Resume updatingResume= this.resumeRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "resume not found"));
 
@@ -94,32 +92,32 @@ public class ResumeServiceImpl implements ResumeService {
 
       Update.copyIgnoreNull(dto, updatingResume); // Not null field update
       Resume updatedResume = this.resumeRepository.save(updatingResume);
-      ResumeDtoOut resumeOut = ResumeDtoOut.fromResume(updatedResume);
+      ResumeDtoOut resumeDtoOut = ResumeDtoOut.fromResume(updatedResume);
 
       if (dto.getProvinceIds() != null) {
-        resumeOut.setProvinces(this.provinceRepository.findAllById(dto.getProvinceIds()));
+        resumeDtoOut.setProvinces(this.provinceRepository.findAllById(dto.getProvinceIds()));
       }
 
       if (dto.getFieldIds() != null ) {
-        resumeOut.setFields(this.fieldRepository.findAllById(dto.getFieldIds()));
+        resumeDtoOut.setFields(this.fieldRepository.findAllById(dto.getFieldIds()));
       }
 
-      return CommonDtoOut.success(resumeOut);
+      return resumeDtoOut;
     }
   }
 
   @Override
-  public CommonDtoOut<ResumeDtoOut> delete(Integer id) {
+  public ResumeDtoOut delete(Integer id) {
     Resume resume= this.resumeRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "resume not found"));
 
-    ResumeDtoOut resumeOut = ResumeDtoOut.fromResume(resume);
+    ResumeDtoOut resumeDtoOut = ResumeDtoOut.fromResume(resume);
     this.resumeRepository.delete(resume);
-    return CommonDtoOut.success(resumeOut);
+    return resumeDtoOut;
   }
 
   @Override
-  public CommonDtoOut<PageDtoOut<DataResume>> list(PageResumeDtoIn dto) {
+  public PageDtoOut<DataResume> list(PageResumeDtoIn dto) {
     Pageable paging = PageRequest.of(dto.getPage() - 1, dto.getPageSize(),
       Sort.by("title").ascending());
 
@@ -132,9 +130,7 @@ public class ResumeServiceImpl implements ResumeService {
         .comparing(DataResume::getTitle, Comparator.nullsLast(Comparator.naturalOrder()))
         .thenComparing(DataResume::getSeekerName, Comparator.nullsLast(Comparator.naturalOrder()))).collect(Collectors.toList());
 
-    return CommonDtoOut.success(
-      PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
-        dataResumeList)
-    );
+    return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
+        dataResumeList);
   }
 }

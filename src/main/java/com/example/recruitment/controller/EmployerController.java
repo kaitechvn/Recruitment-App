@@ -23,7 +23,7 @@ public class EmployerController {
 
     @GetMapping()
     public ResponseEntity<CommonDtoOut<PageDtoOut<DataEmployer>>> list(@Valid PageEmployerDtoIn pageDto) {
-        CommonDtoOut<PageDtoOut<DataEmployer>> dtoOut = this.employerService.list(pageDto);
+        CommonDtoOut<PageDtoOut<DataEmployer>> dtoOut = CommonDtoOut.success(this.employerService.list(pageDto));
         return new ResponseEntity<>(
                 dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
         );
@@ -31,7 +31,7 @@ public class EmployerController {
 
     @PostMapping()
     public ResponseEntity<CommonDtoOut<EmployerDtoOut>> create(@Valid @RequestBody EmployerDtoIn dto) {
-        CommonDtoOut<EmployerDtoOut> dtoOut  = this.employerService.create(dto);
+        CommonDtoOut<EmployerDtoOut> dtoOut  = CommonDtoOut.create(this.employerService.create(dto));
         return new ResponseEntity<>(
                 dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
         );
@@ -39,7 +39,8 @@ public class EmployerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CommonDtoOut<EmployerDtoOut>> get(@PathVariable("id") Integer id) {
-        CommonDtoOut<EmployerDtoOut> dtoOut = this.employerService.get(id);
+      CommonDtoOut dtoOut = CommonDtoOut.success(this.employerService.get(id));
+
         return new ResponseEntity<>(
                 dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
         );
@@ -48,7 +49,7 @@ public class EmployerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CommonDtoOut<EmployerDtoOut>> update(@PathVariable("id") Integer id, @RequestBody UpdateEmployerDtoIn dto) {
-        CommonDtoOut<EmployerDtoOut> dtoOut = this.employerService.update(id, dto);
+        CommonDtoOut<EmployerDtoOut> dtoOut = CommonDtoOut.success(this.employerService.update(id, dto));
         return new ResponseEntity<>(
                 dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
         );
@@ -56,7 +57,7 @@ public class EmployerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CommonDtoOut<EmployerDtoOut>> delete(@PathVariable("id") Integer id) {
-        CommonDtoOut<EmployerDtoOut> dtoOut  = this.employerService.delete(id);
+        CommonDtoOut<EmployerDtoOut> dtoOut  = CommonDtoOut.success(this.employerService.delete(id));
         return new ResponseEntity<>(
                 dtoOut, HttpStatusCode.valueOf(dtoOut.getStatusCode())
         );

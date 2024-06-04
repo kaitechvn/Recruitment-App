@@ -9,11 +9,11 @@ import com.example.recruitment.dto.out.EmployerDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 
 public interface EmployerService {
-    CommonDtoOut<EmployerDtoOut> get(Integer id);
-    CommonDtoOut<EmployerDtoOut> create(EmployerDtoIn dto);
-    CommonDtoOut<EmployerDtoOut> update(Integer id, UpdateEmployerDtoIn dto);
-    CommonDtoOut<EmployerDtoOut> delete(Integer id);
-    CommonDtoOut<PageDtoOut<DataEmployer>> list(PageEmployerDtoIn dto);
+    EmployerDtoOut get(Integer id);
+    EmployerDtoOut create(EmployerDtoIn dto);
+    EmployerDtoOut update(Integer id, UpdateEmployerDtoIn dto);
+    EmployerDtoOut delete(Integer id);
+    PageDtoOut<DataEmployer> list(PageEmployerDtoIn dto);
 
 
 }

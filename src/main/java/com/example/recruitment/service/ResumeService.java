@@ -1,6 +1,5 @@
 package com.example.recruitment.service;
 
-import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.dto.in.ResumeDtoIn;
 import com.example.recruitment.dto.in.page.PageResumeDtoIn;
@@ -13,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ResumeService {
-  CommonDtoOut<ResumeDtoOut> get(Integer id);
-  CommonDtoOut<ResumeDtoOut> create(ResumeDtoIn dto);
-  CommonDtoOut<ResumeDtoOut> update(Integer id, UpdateResumeDtoIn dto);
-  CommonDtoOut<ResumeDtoOut> delete(Integer id);
-  CommonDtoOut<PageDtoOut<DataResume>> list(PageResumeDtoIn dto);
+  ResumeDtoOut get(Integer id);
+  ResumeDtoOut create(ResumeDtoIn dto);
+  ResumeDtoOut update(Integer id, UpdateResumeDtoIn dto);
+  ResumeDtoOut delete(Integer id);
+  PageDtoOut<DataResume> list(PageResumeDtoIn dto);
 }

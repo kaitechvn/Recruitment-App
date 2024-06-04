@@ -31,27 +31,27 @@ public class SeekerServiceImpl implements SeekerService{
   private ProvinceRepository provinceRepository;
 
   @Override
-  public CommonDtoOut<SeekerDtoOut> get(Integer id) {
+  public SeekerDtoOut get(Integer id) {
     Seeker seeker = this.seekerRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found"));
 
-    return CommonDtoOut.success(SeekerDtoOut.fromSeeker(seeker));
+    return SeekerDtoOut.fromSeeker(seeker);
 
   }
 
   @Override
-  public CommonDtoOut<SeekerDtoOut> create(SeekerDtoIn dto) {
+  public SeekerDtoOut create(SeekerDtoIn dto) {
     this.provinceRepository.findById(dto.getProvince())
       .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "province not found"));
 
     Seeker addSeeker = this.seekerRepository.save(Seeker.fromDto(dto));
-    SeekerDtoOut seekerOut = SeekerDtoOut.fromSeeker(addSeeker);
-    return CommonDtoOut.create(seekerOut);
+    SeekerDtoOut seekerDtoOut = SeekerDtoOut.fromSeeker(addSeeker);
+    return seekerDtoOut;
 
   }
 
   @Override
-  public CommonDtoOut<SeekerDtoOut> update(Integer id, SeekerDtoIn dto) {
+  public SeekerDtoOut update(Integer id, SeekerDtoIn dto) {
     Seeker updatingSeeker = this.seekerRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found"));
 
@@ -60,24 +60,24 @@ public class SeekerServiceImpl implements SeekerService{
 
     Update.copyIgnoreNull(dto, updatingSeeker); // not null field update
     Seeker toUpdateSeeker = this.seekerRepository.save(updatingSeeker);
-    SeekerDtoOut seekerOut = SeekerDtoOut.fromSeeker(toUpdateSeeker);
-    return CommonDtoOut.success(seekerOut);
+    SeekerDtoOut seekerDtoOut = SeekerDtoOut.fromSeeker(toUpdateSeeker);
+    return seekerDtoOut;
 
     }
 
   @Override
-  public CommonDtoOut<SeekerDtoOut> delete(Integer id) {
+  public SeekerDtoOut delete(Integer id) {
     Seeker seeker = this.seekerRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found"));
 
-    SeekerDtoOut seekerOut = SeekerDtoOut.fromSeeker(seeker);
+    SeekerDtoOut seekerDtoOut = SeekerDtoOut.fromSeeker(seeker);
     this.seekerRepository.delete(seeker);
-    return CommonDtoOut.success(seekerOut);
+    return seekerDtoOut;
 
   }
 
   @Override
-  public CommonDtoOut<PageDtoOut<DataSeeker>> list(PageSeekerDtoIn dto) {
+  public PageDtoOut<DataSeeker> list(PageSeekerDtoIn dto) {
       Pageable paging = PageRequest.of(dto.getPage() - 1, dto.getPageSize(), Sort.by("name").ascending());
       Page<Seeker> pagedResult;
       if (dto.getProvinceId() == -1) {
@@ -86,9 +86,7 @@ public class SeekerServiceImpl implements SeekerService{
         pagedResult = this.seekerRepository.findAllByProvince(dto.getProvinceId(), paging);
       }
 
-      return CommonDtoOut.success(
-        PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
-          pagedResult.stream().map(DataSeeker::fromSeeker).toList())
-      );
+      return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
+          pagedResult.stream().map(DataSeeker::fromSeeker).toList());
     }
   }

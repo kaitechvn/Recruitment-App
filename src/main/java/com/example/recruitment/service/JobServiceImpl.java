@@ -47,16 +47,16 @@ public class JobServiceImpl implements JobService {
 
   @Cacheable(value = "jobs", key = "#id")
   @Override
-  public CommonDtoOut<JobDtoOut> get(Integer id) {
+  public JobDtoOut get(Integer id) {
       Job job = this.jobRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "job not found"));
 
-      return CommonDtoOut.success(JobDtoOut.fromJob(job));
+    return JobDtoOut.fromJob(job);
 
   }
 
   @Override
-  public CommonDtoOut<JobDtoOut> create(JobDtoIn dto) {
+  public JobDtoOut create(JobDtoIn dto) {
     String errorMessage = ServiceValid.validateIds(
       dto.getProvinceIds(),
       dto.getFieldIds(),
@@ -73,14 +73,13 @@ public class JobServiceImpl implements JobService {
 
     else {
       Job addJob = this.jobRepository.save(Job.fromDto(dto));
-      JobDtoOut jobOut = JobDtoOut.fromJob(addJob);
-      return CommonDtoOut.create(jobOut);
+      return JobDtoOut.fromJob(addJob);
     }
   }
 
   @CachePut(value = "jobs", key = "#id")
   @Override
-  public CommonDtoOut<JobDtoOut> update(Integer id, JobDtoIn dto) {
+  public JobDtoOut update(Integer id, JobDtoIn dto) {
     Job updatingJob = this.jobRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "job not found"));
 
@@ -101,39 +100,39 @@ public class JobServiceImpl implements JobService {
 
         Update.copyIgnoreNull(Job.fromDto(dto), updatingJob); // not null field update
         Job toUpdateJob = this.jobRepository.save(updatingJob);
-        JobDtoOut jobOut = JobDtoOut.fromJob(toUpdateJob);
+        JobDtoOut jobDtoOut = JobDtoOut.fromJob(toUpdateJob);
 
         if (dto.getProvinceIds() != null) {
-          jobOut.setProvinces(this.provinceRepository.findAllById(dto.getProvinceIds()));
+          jobDtoOut.setProvinces(this.provinceRepository.findAllById(dto.getProvinceIds()));
         }
 
         if (dto.getFieldIds() != null ) {
-          jobOut.setFields(this.fieldRepository.findAllById(dto.getFieldIds()));
+          jobDtoOut.setFields(this.fieldRepository.findAllById(dto.getFieldIds()));
         }
 
         if (dto.getEmployerId() != null) {
           String employerName = this.employerRepository.findById(dto.getEmployerId())
                                 .map(Employer::getName)
                                 .orElse(null);
-          jobOut.setEmployerName(employerName);
+          jobDtoOut.setEmployerName(employerName);
       }
 
-        return CommonDtoOut.success(jobOut);
+        return jobDtoOut;
       }
   }
 
   @Override
-  public CommonDtoOut<JobDtoOut> delete(Integer id) {
+  public JobDtoOut delete(Integer id) {
     Job job = this.jobRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "job not found"));
 
-      JobDtoOut jobOut = JobDtoOut.fromJob(job);
+      JobDtoOut jobDtoOut = JobDtoOut.fromJob(job);
       this.jobRepository.delete(job);
-      return CommonDtoOut.success(jobOut);
+      return jobDtoOut;
     }
 
   @Override
-  public CommonDtoOut<PageDtoOut<DataJob>> list(PageJobDtoIn dto) {
+  public PageDtoOut<DataJob> list(PageJobDtoIn dto) {
     Pageable paging = PageRequest.of(dto.getPage() - 1, dto.getPageSize(),
       Sort.by("expiredAt").descending());
 
@@ -148,10 +147,8 @@ public class JobServiceImpl implements JobService {
       .collect(Collectors.toList());
 
 
-    return CommonDtoOut.success(
-      PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
-       dataJobList)
-    );
+    return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
+       dataJobList);
   }
 
 }
