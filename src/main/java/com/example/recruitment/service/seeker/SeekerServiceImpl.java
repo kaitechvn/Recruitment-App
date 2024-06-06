@@ -1,7 +1,6 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.seeker;
 
 import com.example.recruitment.common.data_transform.Update;
-import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 
 import com.example.recruitment.common.error.ErrorCode;

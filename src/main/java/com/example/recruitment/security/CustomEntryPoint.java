@@ -1,4 +1,4 @@
-package com.example.recruitment.authentication;
+package com.example.recruitment.security;
 
 import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.error.ErrorCode;

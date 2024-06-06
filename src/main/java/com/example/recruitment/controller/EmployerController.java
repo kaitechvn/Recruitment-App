@@ -7,7 +7,7 @@ import com.example.recruitment.dto.in.UpdateEmployerDtoIn;
 import com.example.recruitment.dto.out.pagedata.DataEmployer;
 import com.example.recruitment.dto.out.EmployerDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
-import com.example.recruitment.service.EmployerService;
+import com.example.recruitment.service.employer.EmployerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;

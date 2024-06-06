@@ -6,7 +6,7 @@ import com.example.recruitment.dto.in.page.PageSeekerDtoIn;
 import com.example.recruitment.dto.in.SeekerDtoIn;
 import com.example.recruitment.dto.out.pagedata.DataSeeker;
 import com.example.recruitment.dto.out.SeekerDtoOut;
-import com.example.recruitment.service.SeekerService;
+import com.example.recruitment.service.seeker.SeekerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;

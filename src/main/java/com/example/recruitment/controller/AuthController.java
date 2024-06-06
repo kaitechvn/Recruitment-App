@@ -3,7 +3,7 @@ package com.example.recruitment.controller;
 
 import com.example.recruitment.dto.in.AuthLoginDtoIn;
 import com.example.recruitment.dto.out.AuthLoginDtoOut;
-import com.example.recruitment.service.AuthService;
+import com.example.recruitment.service.auth.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

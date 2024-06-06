@@ -14,6 +14,8 @@ public @interface SensitiveWord {
 
   String message() default "Contains sensitive word";
 
+  String lang() default "en";
+
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};

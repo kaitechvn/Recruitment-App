@@ -1,6 +1,5 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.job;
 
-import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.dto.in.JobDtoIn;
 import com.example.recruitment.dto.in.page.PageJobDtoIn;

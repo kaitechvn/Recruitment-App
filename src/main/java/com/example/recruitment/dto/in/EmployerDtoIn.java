@@ -24,7 +24,7 @@ public class EmployerDtoIn {
     @Positive(message = "Must be positive")
     private Integer provinceId;
 
-    @SensitiveWord
+    @SensitiveWord(lang = "vn")
     private String description;
 
 

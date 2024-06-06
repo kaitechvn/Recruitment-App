@@ -2,32 +2,46 @@ package com.example.recruitment.annotation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SensitiveWordValidator implements ConstraintValidator<SensitiveWord, String> {
 
-  // List of sensitive words to check against
-  private static final String[] SENSITIVE_WORDS = {"shit", "wtf", "asshole"};
+  private String lang;
+  private static final String[] SENSITIVE_ENG_WORDS = {"shit", "wtf"};
+  private static final String[] SENSITIVE_VN_WORDS = {"vl", "dm"};
+  private static final Map<String, String[]> sensitiveWordsMap = new HashMap<>();
+
+  static {
+    sensitiveWordsMap.put("en", SENSITIVE_ENG_WORDS);
+    sensitiveWordsMap.put("vn", SENSITIVE_VN_WORDS);
+  }
 
   @Override
-  public void initialize(SensitiveWord sensitiveWord) {
+  public void initialize(SensitiveWord constraintAnnotation) {
+    this.lang = constraintAnnotation.lang();
   }
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (value == null) {
-      return true; // null values are considered valid
+    if (value == null || value.isEmpty()) {
+      return true; // Consider null or empty values as valid. Adjust if necessary.
     }
 
-    // Convert to lower case for case-insensitive comparison
-    String lowerCaseValue = value.toLowerCase();
+    String[] sensitiveWords = sensitiveWordsMap.get(lang);
+    if (sensitiveWords == null) {
+      return true; // If no sensitive words are defined for the language, consider it valid.
+    }
 
-    // Check if the value contains any sensitive words
-    for (String word : SENSITIVE_WORDS) {
-      if (lowerCaseValue.contains(word)) {
-        return false; // Contains sensitive word
+    return !containsSensitiveWord(value, sensitiveWords);
+  }
+
+  private boolean containsSensitiveWord(String value, String[] sensitiveWords) {
+    for (String word : sensitiveWords) {
+      if (value.contains(word)) {
+        return true;
       }
     }
-
-    return true; // No sensitive words found
+    return false;
   }
 }

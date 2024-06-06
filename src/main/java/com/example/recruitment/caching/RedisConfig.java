@@ -1,4 +1,4 @@
-package com.example.recruitment;
+package com.example.recruitment.caching;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ public class RedisConfig {
   @Bean
   public RedisCacheConfiguration cacheConfiguration() {
     return RedisCacheConfiguration.defaultCacheConfig()
-      .entryTtl(Duration.ofMinutes(5))
+      .entryTtl(Duration.ofMinutes(10))
       .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
       .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
   }

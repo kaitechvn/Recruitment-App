@@ -7,7 +7,7 @@ import com.example.recruitment.dto.in.ResumeDtoIn;
 import com.example.recruitment.dto.in.UpdateResumeDtoIn;
 import com.example.recruitment.dto.out.pagedata.DataResume;
 import com.example.recruitment.dto.out.ResumeDtoOut;
-import com.example.recruitment.service.ResumeService;
+import com.example.recruitment.service.resume.ResumeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;

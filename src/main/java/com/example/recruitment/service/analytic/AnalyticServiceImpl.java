@@ -1,4 +1,4 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.analytic;
 
 import com.example.recruitment.dto.out.analytic.Analytic;
 import com.example.recruitment.repository.AnalyticRepository;

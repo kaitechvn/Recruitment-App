@@ -1,4 +1,4 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.auth;
 
 
 import com.example.recruitment.dto.in.AuthLoginDtoIn;

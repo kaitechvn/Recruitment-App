@@ -1,7 +1,7 @@
 package com.example.recruitment.controller;
 
 import com.example.recruitment.dto.out.analytic.Analytic;
-import com.example.recruitment.service.AnalyticServiceImpl;
+import com.example.recruitment.service.analytic.AnalyticServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;

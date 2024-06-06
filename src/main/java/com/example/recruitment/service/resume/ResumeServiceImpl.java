@@ -1,4 +1,4 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.resume;
 
 import com.example.recruitment.common.data_transform.Update;
 import com.example.recruitment.common.dto.PageDtoOut;

@@ -1,7 +1,6 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.employer;
 
 import com.example.recruitment.common.data_transform.Update;
-import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.error.ErrorCode;
 import com.example.recruitment.common.exception.ApiException;
 import com.example.recruitment.dto.in.EmployerDtoIn;
@@ -30,7 +29,6 @@ public class EmployerServiceImpl implements EmployerService {
     @Autowired
     private EmployerRepository employerRepository;
 
-    @Cacheable(value = "employers", key = "#id")
     @Override
     public EmployerDtoOut get(Integer id) {
       Employer employer = this.employerRepository.findById(id)
@@ -52,7 +50,6 @@ public class EmployerServiceImpl implements EmployerService {
         return employerDtoOut;
     }
 
-    @CachePut(value = "employers", key = "#id")
     @Override
     public EmployerDtoOut update(Integer id, UpdateEmployerDtoIn dto) {
       Employer updatingEmployer = this.employerRepository.findById(id)
@@ -62,17 +59,15 @@ public class EmployerServiceImpl implements EmployerService {
       Employer toUpdateEmployer = this.employerRepository.save(updatingEmployer);
       EmployerDtoOut employerDtoOut = EmployerDtoOut.fromEmployer(toUpdateEmployer);
       return employerDtoOut;
-
     }
 
-    @CacheEvict(value = "employers", key = "#id")
     @Override
     public EmployerDtoOut delete(Integer id) {
       Employer employer = this.employerRepository.findById(id)
         .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));
 
       EmployerDtoOut employerDtoOut = EmployerDtoOut.fromEmployer(employer);
-      this.employerRepository.delete(employer);
+      this.employerRepository.deleteById(id);
       return employerDtoOut;
     }
 

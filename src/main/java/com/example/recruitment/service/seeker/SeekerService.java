@@ -1,4 +1,4 @@
-package com.example.recruitment.service;
+package com.example.recruitment.service.seeker;
 
 
 import com.example.recruitment.common.dto.PageDtoOut;

@@ -6,7 +6,7 @@ import com.example.recruitment.dto.in.JobDtoIn;
 import com.example.recruitment.dto.in.page.PageJobDtoIn;
 import com.example.recruitment.dto.out.pagedata.DataJob;
 import com.example.recruitment.dto.out.JobDtoOut;
-import com.example.recruitment.service.JobService;
+import com.example.recruitment.service.job.JobService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
