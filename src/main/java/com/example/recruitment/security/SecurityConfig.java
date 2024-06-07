@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,8 +38,8 @@ import java.security.interfaces.RSAPublicKey;
 
 public class SecurityConfig {
 
-  @Autowired
-  private DataSource dataSource;
+//  @Autowired
+//  private DataSource dataSource;
 
   @Autowired
   @Qualifier("customEntryPoint")
@@ -52,7 +53,7 @@ public class SecurityConfig {
                   .authorizeHttpRequests(request -> request
                             .requestMatchers(
                               "/swagger-ui/**",
-                              "/auth/login",
+                              "/auth/login/**",
                               "/actuator/**"
                             )
                             .permitAll()
@@ -104,8 +105,8 @@ public class SecurityConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    JdbcDaoImpl jdbcDao = new JdbcDaoImpl();
-    jdbcDao.setDataSource(dataSource); // Set the data source
+    CustomJdbcDaoImpl jdbcDao = new CustomJdbcDaoImpl();
+     // Set the data source
     return jdbcDao;
   }
 
