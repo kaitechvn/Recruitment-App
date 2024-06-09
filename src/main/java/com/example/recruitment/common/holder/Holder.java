@@ -1,9 +1,9 @@
 package com.example.recruitment.common.holder;
 
-import com.example.recruitment.repository.EmployerRepository;
-import com.example.recruitment.repository.FieldRepository;
-import com.example.recruitment.repository.ProvinceRepository;
-import com.example.recruitment.repository.SeekerRepository;
+import com.example.recruitment.api.repository.EmployerRepository;
+import com.example.recruitment.api.repository.FieldRepository;
+import com.example.recruitment.api.repository.ProvinceRepository;
+import com.example.recruitment.api.repository.SeekerRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

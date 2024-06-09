@@ -1,7 +1,7 @@
 package com.example.recruitment.common.exception;
 
 import com.example.recruitment.common.dto.CommonDtoOut;
-import com.example.recruitment.common.error.ErrorCode;
+import com.example.recruitment.common.code.ErrorCode;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
