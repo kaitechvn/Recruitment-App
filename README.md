@@ -1,10 +1,11 @@
 # Recruitment Backend API Project
-
+[![GitHub Stars](https://img.shields.io/github/stars/kaitechvn/Recruitment-App.svg)](https://github.com/kaitechvn/Recruitment-App/stargazers)
+[![Current Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/kaitechvn/Recruitment-App)
+[![Live Demo](https://img.shields.io/badge/status-active-blue.svg)](https://github.com/kaitechvn/Recruitment-App)
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Technologies](#technologies)
-- [Entities](#entities)
 - [Features](#features)
 
 ## Introduction
@@ -18,19 +19,15 @@ It serves as a mock project intended to enhance backend programming skills and p
 [![MySQL Badge](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Redis Badge](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
 
-- **Java** version 22 
-- **Spring Boot** version 3.2.5
-- **Spring Securiy:** version 3.2.5 
-- **MySQL:** version 8.0.36
-
-## Entities
-- **Jobs:** Position detail of jobs.
-- **Employers:** Companies offering job opportunities.
-- **Seekers:** Applicants for jobs.
-- **Resumes:** CV information.
+- **Java** - version 22 
+- **Spring Boot** - version 3.2.5
+- **Spring Securiy** - version 3.2.5 
+- **MySQL** - version 8.0.36
 
 ## Features
-- Perform CRUD operations on seekers and resumes.
-- Paginate and filter lists of seekers and resumes.
-- Provide analytical APIs for insights.
-- Secure APIs with authorization mechanisms using JWT.
+- Perform CRUD operations
+- Paginate and filter lists
+- Provide analytical APIs for insights
+- Secure APIs with authorization mechanisms using JWT
+- Implement caching service to improve performance
+- Logging for tracking and debugging
