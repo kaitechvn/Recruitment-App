@@ -31,3 +31,19 @@ It serves as a mock project intended to enhance backend programming skills and p
 - Secure APIs with authorization mechanisms using JWT
 - Implement caching service to improve performance
 - Logging for tracking and debugging
+
+## Installation
+Follow these steps to get the project up and running on your local machine:
+
+### Prerequisites
+- Java 22 or higher
+- MySQL 8.0.36 or higher
+- Redis 
+- Maven (latest version)
+
+### Steps
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/recruitment-backend-api.git
+   cd recruitment-backend-api
+     
