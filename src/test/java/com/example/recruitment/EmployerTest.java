@@ -1,21 +1,19 @@
 package com.example.recruitment;
 
 import com.example.recruitment.common.dto.CommonDtoOut;
-import com.example.recruitment.dto.in.EmployerDtoIn;
-import com.example.recruitment.dto.in.UpdateEmployerDtoIn;
-import com.example.recruitment.dto.in.page.PageEmployerDtoIn;
-import com.example.recruitment.dto.out.pagedata.DataEmployer;
+import com.example.recruitment.api.dto.in.EmployerDtoIn;
+import com.example.recruitment.api.dto.in.UpdateEmployerDtoIn;
+import com.example.recruitment.api.dto.in.page.PageEmployerDtoIn;
+import com.example.recruitment.api.dto.out.pagedata.DataEmployer;
 import com.example.recruitment.common.dto.PageDtoOut;
-import com.example.recruitment.entity.Employer;
-import com.example.recruitment.repository.EmployerRepository;
+import com.example.recruitment.api.entity.Employer;
+import com.example.recruitment.api.repository.EmployerRepository;
 import com.example.recruitment.sample.Sample;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +21,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -48,7 +50,17 @@ public class EmployerTest {
     @Before
     public void setUp() {
       testEmployer = this.employerRepository.save(Sample.generateEmployer());
+
+      // Set up mock user
+      UserDetails userDetails = User.withUsername("testuser")
+        .password("password")
+        .roles("USER")
+        .build();
+
+      SecurityContextHolder.getContext().setAuthentication(
+        new UsernamePasswordAuthenticationToken(userDetails, "password", userDetails.getAuthorities()));
     }
+
     @After
     public void tearDown() {
       this.employerRepository.delete(testEmployer);

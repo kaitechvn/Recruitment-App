@@ -1,13 +1,15 @@
 package com.example.recruitment.sample;
 
-import com.example.recruitment.dto.in.EmployerDtoIn;
-import com.example.recruitment.dto.in.JobDtoIn;
-import com.example.recruitment.dto.in.UpdateEmployerDtoIn;
-import com.example.recruitment.dto.in.page.PageEmployerDtoIn;
-import com.example.recruitment.dto.in.page.PageJobDtoIn;
-import com.example.recruitment.entity.Employer;
-import com.example.recruitment.entity.Job;
+import com.example.recruitment.api.dto.in.EmployerDtoIn;
+import com.example.recruitment.api.dto.in.JobDtoIn;
+import com.example.recruitment.api.dto.in.UpdateEmployerDtoIn;
+import com.example.recruitment.api.dto.in.page.PageEmployerDtoIn;
+import com.example.recruitment.api.dto.in.page.PageJobDtoIn;
+import com.example.recruitment.api.entity.Employer;
+import com.example.recruitment.api.entity.Job;
+import com.example.recruitment.api.entity.User;
 import com.github.javafaker.Faker;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -142,6 +144,19 @@ public class Sample {
     provinces.append("-").append(faker.number().numberBetween(1, 10)).append("-");
     provinces.append(faker.number().numberBetween(1, 10)).append("-");
     return provinces.toString();
+  }
+
+  public static User generateSampleActiveUser(String rawPassword) {
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    Faker faker = new Faker();
+
+    User user = new User();
+    user.setUsername(faker.name().username());
+    String hashedPassword = passwordEncoder.encode(rawPassword);
+    user.setPassword(hashedPassword);
+    user.setActive(true);
+
+    return user;
   }
 
 }

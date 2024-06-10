@@ -53,10 +53,10 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     }
 
     // Log the complete request details
-    log.info(requestMessage.toString());
+    log.debug(requestMessage.toString());
 
-    log.info("Response Status Code: {}", responseWrapper.getStatus());
-    log.info("Response {}", new String(responseWrapper.getContentAsByteArray()));
+    log.debug("Response Status Code: {}", responseWrapper.getStatus());
+    log.debug("Response {}", new String(responseWrapper.getContentAsByteArray()));
     responseWrapper.copyBodyToResponse();
 
   }

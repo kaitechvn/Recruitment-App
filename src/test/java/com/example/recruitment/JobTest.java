@@ -1,11 +1,11 @@
 package com.example.recruitment;
 
-import com.example.recruitment.dto.in.JobDtoIn;
-import com.example.recruitment.dto.in.page.PageJobDtoIn;
-import com.example.recruitment.entity.Employer;
-import com.example.recruitment.entity.Job;
-import com.example.recruitment.repository.EmployerRepository;
-import com.example.recruitment.repository.JobRepository;
+import com.example.recruitment.api.dto.in.JobDtoIn;
+import com.example.recruitment.api.dto.in.page.PageJobDtoIn;
+import com.example.recruitment.api.entity.Employer;
+import com.example.recruitment.api.entity.Job;
+import com.example.recruitment.api.repository.EmployerRepository;
+import com.example.recruitment.api.repository.JobRepository;
 import com.example.recruitment.sample.Sample;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -47,6 +51,15 @@ public class JobTest {
   public void setUp() {
     setUpEmployer = this.employerRepository.save(Sample.generateEmployer());
     testJob = this.jobRepository.save(Sample.generateJob());
+
+    // Set up mock user
+    UserDetails userDetails = User.withUsername("testuser")
+      .password("password")
+      .roles("USER")
+      .build();
+
+    SecurityContextHolder.getContext().setAuthentication(
+      new UsernamePasswordAuthenticationToken(userDetails, "password", userDetails.getAuthorities()));
   }
 
   @After

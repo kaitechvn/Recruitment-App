@@ -1,6 +1,6 @@
 package com.example.recruitment.common.dto;
 
-import com.example.recruitment.common.error.ErrorCode;
+import com.example.recruitment.common.code.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
