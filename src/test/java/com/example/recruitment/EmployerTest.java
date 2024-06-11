@@ -1,5 +1,6 @@
 package com.example.recruitment;
 
+import com.example.recruitment.api.dto.in.AuthLoginDtoIn;
 import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.api.dto.in.EmployerDtoIn;
 import com.example.recruitment.api.dto.in.UpdateEmployerDtoIn;
@@ -19,16 +20,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,18 +56,24 @@ public class EmployerTest {
     int randomServerPort;
 
     private Employer testEmployer;
+    private String testToken;
+
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+      final String endpoint ="http://localhost:"+randomServerPort+"/auth/login";
+      URI uri = new URI(endpoint);
+
+      AuthLoginDtoIn authTest = new AuthLoginDtoIn("test", "testpassword");
+
+      HttpEntity<AuthLoginDtoIn> request = new HttpEntity<>(authTest);
+      ResponseEntity<String> result = this.template.postForEntity(uri, request, String.class);
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      JsonNode root = objectMapper.readTree(result.getBody());
+      testToken = root.get("accessToken").asText();
+
       testEmployer = this.employerRepository.save(Sample.generateEmployer());
 
-      // Set up mock user
-      UserDetails userDetails = User.withUsername("testuser")
-        .password("password")
-        .roles("USER")
-        .build();
-
-      SecurityContextHolder.getContext().setAuthentication(
-        new UsernamePasswordAuthenticationToken(userDetails, "password", userDetails.getAuthorities()));
     }
 
     @After
@@ -71,7 +86,12 @@ public class EmployerTest {
       final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
       URI uri = new URI(endpoint);
 
-      ResponseEntity<String> result = this.template.getForEntity(uri, String.class);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(testToken);
+
+      HttpEntity<String> entity = new HttpEntity<>(headers);
+
+      ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.GET, entity, String.class);
       assertEquals(200, result.getStatusCodeValue());
 
     }
@@ -83,7 +103,10 @@ public class EmployerTest {
 
         EmployerDtoIn reqBody = Sample.generateEmployerDto();
 
-        HttpEntity<EmployerDtoIn> request = new HttpEntity<>(reqBody);
+        HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(testToken);
+
+        HttpEntity<EmployerDtoIn> request = new HttpEntity<>(reqBody, headers);
         ResponseEntity<String> result = this.template.postForEntity(uri, request, String.class);
         assertEquals(201, result.getStatusCodeValue());
 
@@ -102,7 +125,10 @@ public class EmployerTest {
       URI uri = new URI(endpoint);
 
       UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
-      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(testToken);
+
+      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody, headers);
       ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.PUT, request, String.class);
 
       assertEquals(200, result.getStatusCodeValue());
@@ -115,7 +141,10 @@ public class EmployerTest {
       URI uri = new URI(endpoint);
 
       UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
-      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(testToken);
+
+      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody, headers);
       ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.PUT, request, String.class);
 
       assertEquals(404, result.getStatusCodeValue());
@@ -126,7 +155,11 @@ public class EmployerTest {
       final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
       URI uri = new URI(endpoint);
 
-      ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.DELETE, null, String.class);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(testToken);
+      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(headers);
+
+      ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.DELETE, request, String.class);
       assertEquals(200, result.getStatusCodeValue());
     }
 
@@ -141,24 +174,32 @@ public class EmployerTest {
         .build()
         .toUri();
 
-      ResponseEntity<String> result = this.template.getForEntity(uri, String.class);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(testToken);
+
+      HttpEntity<String> entity = new HttpEntity<>(headers);
+
+      ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.GET, entity, String.class);
+
       assertEquals(200, result.getStatusCodeValue());
     }
 
-  @Test
-  public void testListResult() throws Exception {
-  PageEmployerDtoIn testPageDto = Sample.generateEmployerPageDto();
+    @Test
+    public void testListResult() throws Exception {
+    PageEmployerDtoIn testPageDto = Sample.generateEmployerPageDto();
 
-  final String endpoint ="http://localhost:"+randomServerPort+"/employer";
-  URI uri = UriComponentsBuilder.fromUriString(endpoint)
-    .queryParam("page",testPageDto.getPage())
-    .queryParam("pageSize", testPageDto.getPageSize())
-    .build()
-    .toUri();
+    final String endpoint ="http://localhost:"+randomServerPort+"/employer";
+    URI uri = UriComponentsBuilder.fromUriString(endpoint)
+      .queryParam("page",testPageDto.getPage())
+      .queryParam("pageSize", testPageDto.getPageSize())
+      .build()
+      .toUri();
 
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.setBearerAuth(testToken);
+
     HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
     // Making GET request with query parameters
@@ -211,13 +252,18 @@ public class EmployerTest {
     final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
     URI uri = new URI(endpoint);
 
-    ResponseEntity<String> response1 = this.template.getForEntity(uri, String.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(testToken);
+
+    HttpEntity<String> requestGet = new HttpEntity<>(headers);
+    ResponseEntity<String> response1 = this.template.exchange(uri, HttpMethod.GET, requestGet, String.class);
 
     UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
-    HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody);
-    ResponseEntity<String> response2 = this.template.exchange(uri, HttpMethod.PUT, request, String.class);
+    HttpEntity<UpdateEmployerDtoIn> requestPut = new HttpEntity<>(reqBody,headers);
 
-    ResponseEntity<String> response3 = this.template.getForEntity(uri, String.class);
+    ResponseEntity<String> response2 = this.template.exchange(uri, HttpMethod.PUT, requestPut, String.class);
+
+    ResponseEntity<String> response3 = this.template.exchange(uri, HttpMethod.GET, requestGet, String.class);
 
     // After update the get need not to be equal
     // For detail, assert response3 body as updated changes
@@ -230,15 +276,19 @@ public class EmployerTest {
     final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
     URI uri = new URI(endpoint);
 
-    this.template.getForEntity(uri, String.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(testToken);
 
-    this.template.exchange(uri, HttpMethod.DELETE, null, Void.class);
+    HttpEntity<String> request = new HttpEntity<>(headers);
 
-    ResponseEntity<String> response = this.template.getForEntity(uri, String.class);
+    this.template.exchange(uri, HttpMethod.GET, request, String.class);
+
+    this.template.exchange(uri, HttpMethod.DELETE, request, Void.class);
+
+    ResponseEntity<String> response = this.template.exchange(uri, HttpMethod.GET, request, String.class);
     assertEquals(404, response.getStatusCodeValue(), "Request should return status code 404");
-
-
   }
+
 }
 
 
