@@ -33,7 +33,7 @@ It serves as a mock project intended to enhance backend programming skills and p
 - Logging for tracking and debugging
 
 ## Installation
-Follow these steps to get the project up and running on your local machine:
+Follow these steps to get the project up and running on your local machine. Use your command line for setting up
 
 ### Prerequisites
 - Java 22 or higher
@@ -41,9 +41,19 @@ Follow these steps to get the project up and running on your local machine:
 - Redis 
 - Maven (latest version)
 
-### Steps
-1. **Clone the repository**
+### Setup
+**1. Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/recruitment-backend-api.git
+   $ git clone https://github.com/yourusername/recruitment-backend-api.git
    cd recruitment-backend-api
+   ```
+**4. Build the project**
+   ```bash
+   $ mvn clean install
+   ```
+**5. Run the application**
+   ```bash
+   $ java -jar target/recruitment-1.0.0-SNAPSHOT.jar
+   ```
+
      
