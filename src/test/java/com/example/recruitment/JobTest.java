@@ -108,6 +108,7 @@ public class JobTest {
   public void testUpdateSuccess() throws Exception {
     JobDtoIn updatingJob = Sample.generateJobDto();
     updatingJob.setTitle("Updated Title");
+    updatingJob.setEmployerId(setUpEmployer.getId());
 
     mockMvc.perform(MockMvcRequestBuilders.put("/job/{id}", testJob.getId())
         .contentType(MediaType.APPLICATION_JSON)
@@ -123,11 +124,12 @@ public class JobTest {
 
   @Test
   public void testUpdateFailIdNotExist() throws Exception {
-    JobDtoIn jobDtoIn = Sample.generateJobDto();
+    JobDtoIn updatingJob = Sample.generateJobDto();
+    updatingJob.setEmployerId(setUpEmployer.getId());
 
     mockMvc.perform(MockMvcRequestBuilders.put("/job/{id}", Sample.generateRandomId())
         .contentType(MediaType.APPLICATION_JSON)
-        .content(new ObjectMapper().writeValueAsString(jobDtoIn)))
+        .content(new ObjectMapper().writeValueAsString(updatingJob)))
       .andExpect(status().isNotFound())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.errorCode").value(404))
