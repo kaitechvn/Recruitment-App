@@ -6,6 +6,7 @@
 
 - [Introduction](#introduction)
 - [Technologies](#technologies)
+- [Architecture](#architecture)
 - [Features](#features)
 
 ## Introduction
@@ -23,6 +24,9 @@ It serves as a mock project intended to enhance backend programming skills and p
 - **Spring Boot** - version 3.2.5
 - **Spring Securiy** - version 3.2.5 
 - **MySQL** - version 8.0.36
+
+## Architecture
+![Project Flow](./img/architecture.png)
 
 ## Features
 - Perform CRUD operations
