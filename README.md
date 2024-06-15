@@ -8,6 +8,7 @@
 - [Technologies](#technologies)
 - [Architecture](#architecture)
 - [Features](#features)
+- [Installation](#installation)
 
 ## Introduction
 This project focuses on the recruitment domain, aiming to design and implement a comprehensive API system for managing various recruitment-related operations.
@@ -30,20 +31,19 @@ It serves as a mock project intended to enhance backend programming skills and p
 
 ## Features
 - Perform CRUD operations
-- Paginate and filter lists
 - Provide analytical APIs for insights
 - Secure APIs with authorization mechanisms using JWT
 - Implement caching service to improve performance
-- Logging for tracking and debugging
+- Create log for tracking and debugging
+- Monitor application system using Prothemeus, Grafana, Sentry
 
 ## Installation
 Follow these steps to get the project up and running on your local machine. Use your command line for setting up
 
 ### Prerequisites
-- Java 22 or higher
-- MySQL 8.0.36 or higher
-- Redis 
-- Maven (latest version)
+- Java 22
+- Maven 
+- Docker 
 
 ### Setup
 **1. Clone the repository**
@@ -51,13 +51,21 @@ Follow these steps to get the project up and running on your local machine. Use 
    $ git clone https://github.com/yourusername/recruitment-backend-api.git
    cd recruitment-backend-api
    ```
-**4. Build the project**
+**2. Run virtual machine**
+   ```bash
+   $ docker compose up -d 
+   ```
+**3. Add data to MySQL**
+   ```bash
+   $ docker exec -i recruitment-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
+   $ docker exec -i recruitment-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@ job_db"' < recruitment.sql
+   ```
+   
+**4. Run the application**
    ```bash
    $ mvn clean install
-   ```
-**5. Run the application**
-   ```bash
    $ java -jar target/recruitment-1.0.0-SNAPSHOT.jar
    ```
+
 
      
