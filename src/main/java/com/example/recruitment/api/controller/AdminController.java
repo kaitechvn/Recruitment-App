@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Hidden
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('BOSS')")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

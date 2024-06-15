@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
-@Tag(name = "Analytic", description = "Thống kê số liệu")
+@Tag(name = "Analytic", description = "Insight analytic")
 @RestController
 public class AnalyticController {
 

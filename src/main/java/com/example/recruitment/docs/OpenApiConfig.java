@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
                                        url = "http://kaitech.dev.vn"),
                    version = "1.0.0",
                    title = "API doc for recruitment project"),
-                   servers = {@Server(url = "http://localhost:8081", description = "LOCAL ENV"),
+                   servers = {@Server(url = "http://localhost:8080", description = "LOCAL ENV"),
                               @Server(url = "http://localhost:8083", description = "PROD ENV")}
                    )
 

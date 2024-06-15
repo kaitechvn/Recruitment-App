@@ -24,9 +24,26 @@
 		</dependency>
 
     <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.sentry</groupId>
+      <artifactId>sentry-spring-boot-starter-jakarta</artifactId>
+      <version>6.30.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-mongodb</artifactId>
+    </dependency>
+
+
+    <dependency>
       <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
-      <version>1.0.2</version> <!-- Make sure to use the latest version -->
+      <version>1.0.2</version>
     </dependency>
 
     <dependency>
@@ -101,12 +118,6 @@
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>recruitment</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

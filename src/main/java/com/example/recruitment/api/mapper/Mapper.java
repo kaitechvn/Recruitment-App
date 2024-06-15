@@ -2,6 +2,7 @@ package com.example.recruitment.api.mapper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Mapper {
@@ -70,7 +71,8 @@ public class Mapper {
       clazz.equals(Byte.class) ||
       clazz.equals(Character.class) ||
       clazz.equals(Short.class) ||
-      clazz.equals(Void.class);
+      clazz.equals(Void.class) ||
+      clazz.equals(Date.class);
   }
 
 }

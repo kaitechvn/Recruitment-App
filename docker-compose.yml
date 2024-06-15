@@ -9,3 +9,42 @@ services:
       - '6379:6379'
     restart: on-failure
     command: /bin/sh -c "redis-server --requirepass $${REDIS_PASSWORD}"
+
+  prometheus:
+    image: prom/prometheus:v2.46.0
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: on-failure
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:10.0.3-ubuntu
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana:/var/lib/grafana
+    restart: on-failure
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  mongodb:
+    image: mongodb/mongodb-community-server:7.0.1-ubuntu2204
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Mongo@123
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb:/data/db
+    restart: on-failure
+
+volumes:
+  grafana:
+    driver: local
+  mongodb:
+    driver: local

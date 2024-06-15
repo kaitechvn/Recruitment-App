@@ -1,4 +1,4 @@
-package com.example.recruitment.annotation;
+package com.example.recruitment.api.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

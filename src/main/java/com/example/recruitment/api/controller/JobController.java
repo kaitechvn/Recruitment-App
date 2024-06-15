@@ -19,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Job", description = "Quản lý job")
+@Tag(name = "Job", description = "Manage jobs")
 @SecurityRequirement(name = "Authorization")
 @RestController
 @RequestMapping("/job")
@@ -28,11 +28,11 @@ public class JobController {
   @Autowired
   private JobService jobService;
 
-  @Operation(summary = "Lấy thông tin job theo id")
-  @ApiResponse(responseCode = "200", description = "Thành công")
+  @Operation(summary = "Get job information by ID")
+  @ApiResponse(responseCode = "200", description = "Success")
   @GetMapping("/{id}")
   public ResponseEntity<CommonDtoOut<JobDtoOut>> get(
-    @Parameter(description = "ID của job cần lấy thông tin", required = true)
+    @Parameter(description = "ID of the job to retrieve information for", required = true)
     @PathVariable("id") Integer id) {
     CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.success(this.jobService.get(id));
     return ResponseEntity
@@ -40,11 +40,11 @@ public class JobController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Lấy danh sách job")
-  @ApiResponse(responseCode = "200", description = "Thành công")
+  @Operation(summary = "Get list of jobs")
+  @ApiResponse(responseCode = "200", description = "Success")
   @GetMapping()
   public ResponseEntity<CommonDtoOut<PageDtoOut<DataJob>>> list(
-    @Parameter(description = "Thông tin phân trang")
+    @Parameter(description = "Pagination information")
     @Valid PageJobDtoIn dto) {
     CommonDtoOut<PageDtoOut<DataJob>> dtoOut = CommonDtoOut.success(this.jobService.list(dto));
     return ResponseEntity
@@ -52,8 +52,8 @@ public class JobController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Tạo mới job")
-  @ApiResponse(responseCode = "200", description = "Thành công")
+  @Operation(summary = "Create a new job")
+  @ApiResponse(responseCode = "200", description = "Success")
   @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public ResponseEntity<CommonDtoOut<JobDtoOut>> create(@Valid @RequestBody JobDtoIn dto) {
     CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.create(this.jobService.create(dto));
@@ -62,11 +62,11 @@ public class JobController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Cập nhật thông tin job theo id")
-  @ApiResponse(responseCode = "200", description = "Thành công")
+  @Operation(summary = "Update job information by ID")
+  @ApiResponse(responseCode = "200", description = "Success")
   @PutMapping("/{id}")
   public ResponseEntity<CommonDtoOut<JobDtoOut>> update(
-    @Parameter(description = "ID của job cần cập nhật thông tin", required = true) @PathVariable("id") Integer id,
+    @Parameter(description = "ID of the job to update information for", required = true) @PathVariable("id") Integer id,
     @Valid @RequestBody JobDtoIn dto) {
     CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.success(jobService.update(id, dto));
     return ResponseEntity
@@ -74,11 +74,11 @@ public class JobController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Xóa job theo id")
-  @ApiResponse(responseCode = "200", description = "Thành công")
+  @Operation(summary = "Delete job by ID")
+  @ApiResponse(responseCode = "200", description = "Success")
   @DeleteMapping("/{id}")
   public ResponseEntity<CommonDtoOut<JobDtoOut>> delete(
-    @Parameter(description = "ID của job cần xóa", required = true)
+    @Parameter(description = "ID of the job to delete", required = true)
     @PathVariable("id") Integer id) {
     CommonDtoOut<JobDtoOut> dtoOut = CommonDtoOut.success(jobService.delete(id));
     return ResponseEntity
