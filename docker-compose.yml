@@ -1,6 +1,19 @@
 version: '3.3'
 
+
 services:
+  mysql-db:
+    image: mysql:8.0.33
+    environment:
+      MYSQL_ROOT_PASSWORD: Khai2604@
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-db:/var/lib/mysql
+    restart: on-failure
+
   redis:
     image: redis:7.2.1-alpine3.18
     environment:
@@ -47,4 +60,6 @@ volumes:
   grafana:
     driver: local
   mongodb:
+    driver: local
+  mysql-db:
     driver: local
