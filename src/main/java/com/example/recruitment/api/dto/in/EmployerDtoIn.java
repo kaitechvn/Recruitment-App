@@ -1,5 +1,5 @@
 package com.example.recruitment.api.dto.in;
-import com.example.recruitment.annotation.SensitiveWord;
+import com.example.recruitment.api.validator.SensitiveWord;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

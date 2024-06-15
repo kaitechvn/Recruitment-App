@@ -38,6 +38,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,15 +53,15 @@ public class EmployerTest {
     @Autowired
     private TestRestTemplate template;
 
-    @LocalServerPort
-    int randomServerPort;
+//    @LocalServerPort
+//    int "8080";
 
     private Employer testEmployer;
     private String testToken;
 
     @Before
     public void setUp() throws Exception {
-      final String endpoint ="http://localhost:"+randomServerPort+"/auth/login";
+      final String endpoint ="http://localhost:"+"8080"+"/auth/login";
       URI uri = new URI(endpoint);
 
       AuthLoginDtoIn authTest = new AuthLoginDtoIn("test", "testpassword");
@@ -83,7 +84,7 @@ public class EmployerTest {
 
     @Test
     public void testGetSuccess() throws Exception {
-      final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
+      final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
       URI uri = new URI(endpoint);
 
       HttpHeaders headers = new HttpHeaders();
@@ -98,7 +99,7 @@ public class EmployerTest {
 
     @Test
     public void testAddSuccess() throws Exception {
-        final String endpoint ="http://localhost:"+randomServerPort+"/employer";
+        final String endpoint ="http://localhost:"+"8080"+"/employer";
         URI uri = new URI(endpoint);
 
         EmployerDtoIn reqBody = Sample.generateEmployerDto();
@@ -121,7 +122,7 @@ public class EmployerTest {
 
     @Test
     public void testUpdateSuccess()  throws Exception {
-      final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
+      final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
       URI uri = new URI(endpoint);
 
       UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
@@ -137,7 +138,7 @@ public class EmployerTest {
     @Test
     public void testIdNotExistUpdateError() throws Exception {
       String idUri = String.valueOf(Sample.generateRandomId());
-      final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + idUri;
+      final String endpoint ="http://localhost:"+"8080"+"/employer/" + idUri;
       URI uri = new URI(endpoint);
 
       UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
@@ -152,7 +153,7 @@ public class EmployerTest {
 
     @Test
     public void testDeleteSuccess() throws Exception {
-      final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
+      final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
       URI uri = new URI(endpoint);
 
       HttpHeaders headers = new HttpHeaders();
@@ -167,7 +168,7 @@ public class EmployerTest {
     public void testListSuccess() throws Exception {
       PageEmployerDtoIn testPageDto = Sample.generateEmployerPageDto();
 
-      final String endpoint ="http://localhost:"+randomServerPort+"/employer";
+      final String endpoint ="http://localhost:"+"8080"+"/employer";
       URI uri = UriComponentsBuilder.fromUriString(endpoint)
         .queryParam("page",testPageDto.getPage())
         .queryParam("pageSize", testPageDto.getPageSize())
@@ -188,7 +189,7 @@ public class EmployerTest {
     public void testListResult() throws Exception {
     PageEmployerDtoIn testPageDto = Sample.generateEmployerPageDto();
 
-    final String endpoint ="http://localhost:"+randomServerPort+"/employer";
+    final String endpoint ="http://localhost:"+"8080"+"/employer";
     URI uri = UriComponentsBuilder.fromUriString(endpoint)
       .queryParam("page",testPageDto.getPage())
       .queryParam("pageSize", testPageDto.getPageSize())
@@ -227,7 +228,7 @@ public class EmployerTest {
 
   @Test
   public void testGetSuccessWithCache() throws Exception {
-    final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
+    final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
     URI uri = new URI(endpoint);
 
     // First call - should be slower as it involves fetching and caching
@@ -249,7 +250,7 @@ public class EmployerTest {
 
   @Test
   public void testGetUpdateWithCachePut() throws Exception {
-    final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
+    final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
     URI uri = new URI(endpoint);
 
     HttpHeaders headers = new HttpHeaders();
@@ -265,15 +266,13 @@ public class EmployerTest {
 
     ResponseEntity<String> response3 = this.template.exchange(uri, HttpMethod.GET, requestGet, String.class);
 
-    // After update the get need not to be equal
-    // For detail, assert response3 body as updated changes
     assertNotEquals(response1.getBody(), response3.getBody(), "Response bodies should not be equal");
     assertEquals(response2.getBody(), response3.getBody(), "Response bodies should be equal");
   }
 
   @Test
   public void testGetDeleteWithCacheEvict() throws Exception {
-    final String endpoint ="http://localhost:"+randomServerPort+"/employer/" + testEmployer.getId().toString();
+    final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
     URI uri = new URI(endpoint);
 
     HttpHeaders headers = new HttpHeaders();

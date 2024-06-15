@@ -10,7 +10,6 @@ import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.api.service.employer.EmployerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Employer", description = "Quản lý employer")
+@Tag(name = "Employer", description = "Manage employers")
 @SecurityRequirement(name = "Authorization")
 @RestController
 @RequestMapping("/employer")
@@ -29,10 +28,10 @@ public class EmployerController {
   @Autowired
   private EmployerService employerService;
 
-  @Operation(summary = "Lấy thông tin user theo id")
+  @Operation(summary = "Get employer information by ID")
   @GetMapping("/{id}")
   public ResponseEntity<CommonDtoOut<EmployerDtoOut>> get(
-    @Parameter(description = "Id của employer cần lấy thông tin", required = true)
+    @Parameter(description = "ID of the employer to retrieve information for", required = true)
     @PathVariable("id") Integer id) {
     CommonDtoOut<EmployerDtoOut> dtoOut = CommonDtoOut.success(this.employerService.get(id));
     return ResponseEntity
@@ -40,10 +39,10 @@ public class EmployerController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Lấy danh sách user")
+  @Operation(summary = "Get list of employers")
   @GetMapping()
   public ResponseEntity<CommonDtoOut<PageDtoOut<DataEmployer>>> list(
-    @Parameter(description = "Thông tin phân trang")
+    @Parameter(description = "Pagination information")
     @Valid PageEmployerDtoIn pageDto) {
     CommonDtoOut<PageDtoOut<DataEmployer>> dtoOut = CommonDtoOut.success(this.employerService.list(pageDto));
     return ResponseEntity
@@ -51,11 +50,11 @@ public class EmployerController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Thêm mới một user")
+  @Operation(summary = "Create new employer")
   @PostMapping()
-  @ApiResponse(responseCode = "201", description = "Thành công")
+  @ApiResponse(responseCode = "201", description = "Success")
   public ResponseEntity<CommonDtoOut<EmployerDtoOut>> create(
-    @Parameter(description = "Thông tin employer mới cần tạo", required = true)
+    @Parameter(description = "Information of the new employer to be created", required = true)
     @Valid @RequestBody EmployerDtoIn dto) {
     CommonDtoOut<EmployerDtoOut> dtoOut = CommonDtoOut.create(this.employerService.create(dto));
     return ResponseEntity
@@ -63,10 +62,10 @@ public class EmployerController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Cập nhật user theo id")
+  @Operation(summary = "Update employer information by ID")
   @PutMapping("/{id}")
   public ResponseEntity<CommonDtoOut<EmployerDtoOut>> update(
-    @Parameter(description = "ID của employer cần cập nhật thông tin", required = true) @PathVariable("id") Integer id,
+    @Parameter(description = "ID of the employer to update information for", required = true) @PathVariable("id") Integer id,
     @Valid @RequestBody UpdateEmployerDtoIn dto) {
     CommonDtoOut<EmployerDtoOut> dtoOut = CommonDtoOut.success(this.employerService.update(id, dto));
     return ResponseEntity
@@ -74,10 +73,10 @@ public class EmployerController {
       .body(dtoOut);
   }
 
-  @Operation(summary = "Xóa user theo id")
+  @Operation(summary = "Delete employer by ID")
   @DeleteMapping("/{id}")
   public ResponseEntity<CommonDtoOut<EmployerDtoOut>> delete(
-    @Parameter(description = "ID của employer cần xóa", required = true)
+    @Parameter(description = "ID of the employer to delete", required = true)
     @PathVariable("id") Integer id) {
     CommonDtoOut<EmployerDtoOut> dtoOut = CommonDtoOut.success(this.employerService.delete(id));
     return ResponseEntity
