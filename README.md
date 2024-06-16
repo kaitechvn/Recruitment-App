@@ -1,5 +1,4 @@
 # Recruitment Backend API Project
-[![GitHub Stars](https://img.shields.io/github/stars/kaitechvn/Recruitment-App.svg)](https://github.com/kaitechvn/Recruitment-App/stargazers)
 [![Current Version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://github.com/kaitechvn/Recruitment-App)
 [![Live Demo](https://img.shields.io/badge/status-active-blue.svg)](https://github.com/kaitechvn/Recruitment-App)
 [![Phone](https://img.shields.io/badge/contact-+8436782589-lightblue.svg)](tel:+8436782589)
