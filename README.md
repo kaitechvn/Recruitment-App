@@ -1,6 +1,6 @@
 # Recruitment Backend API Project
 [![GitHub Stars](https://img.shields.io/github/stars/kaitechvn/Recruitment-App.svg)](https://github.com/kaitechvn/Recruitment-App/stargazers)
-[![Current Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/kaitechvn/Recruitment-App)
+[![Current Version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://github.com/kaitechvn/Recruitment-App)
 [![Live Demo](https://img.shields.io/badge/status-active-blue.svg)](https://github.com/kaitechvn/Recruitment-App)
 ## Table of Contents
 
@@ -9,6 +9,8 @@
 - [Architecture](#architecture)
 - [Features](#features)
 - [Installation](#installation)
+- [Example usage](#example usage)
+- [Link and screenshot](#link and screenshot)
 
 ## Introduction
 This project focuses on the recruitment domain, aiming to design and implement a comprehensive API system for managing various recruitment-related operations.
@@ -25,6 +27,7 @@ It serves as a mock project intended to enhance backend programming skills and p
 - **Spring Boot** - version 3.2.5
 - **Spring Securiy** - version 3.2.5 
 - **MySQL** - version 8.0.36
+- **Redis** - version 7.2.1
 
 ## Architecture
 ![Project Flow](./img/architecture.png)
@@ -42,30 +45,48 @@ Follow these steps to get the project up and running on your local machine. Use 
 
 ### Prerequisites
 - Java 22
+- MySQL 
+- Mongosh - for MongoDB
 - Maven 
 - Docker 
 
 ### Setup
 **1. Clone the repository**
    ```bash
-   $ git clone https://github.com/yourusername/recruitment-backend-api.git
-   cd recruitment-backend-api
+   $ https://github.com/kaitechvn/Recruitment-App.git
+   cd Recruitment-App
    ```
 **2. Run virtual machine**
    ```bash
    $ docker compose up -d 
    ```
-**3. Add data to MySQL**
+**3. Add data to MySQL and MongoDB**
+*MySQL*
    ```bash
-   $ docker exec -i recruitment-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
-   $ docker exec -i recruitment-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@ job_db"' < recruitment.sql
+   $ docker exec -i recruitment-app-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
+   $ docker exec -i recruitment-app-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" job_db' < recruitment.sql
    ```
+*MongoDB*
+   ```bash
+   $ docker exec -it recruitment-app-mongodb-1 mongosh --username root --password Mongo@123 --authenticationDatabase admin
+   use sample_db
+   ```
+   ```bash
+   db.createUser({
+   user: 'user',
+   pwd: 'User123',
+   roles: [{ role: 'readWrite', db: 'sample_db' }]
+   });
+   ```
+
    
 **4. Run the application**
    ```bash
    $ mvn clean install
-   $ java -jar target/recruitment-1.0.0-SNAPSHOT.jar
+   $ java -jar target/recruitment-0.0.1-SNAPSHOT.jar
    ```
+
+**5. Example usage**
 
 
      
