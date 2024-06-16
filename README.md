@@ -2,6 +2,8 @@
 [![GitHub Stars](https://img.shields.io/github/stars/kaitechvn/Recruitment-App.svg)](https://github.com/kaitechvn/Recruitment-App/stargazers)
 [![Current Version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://github.com/kaitechvn/Recruitment-App)
 [![Live Demo](https://img.shields.io/badge/status-active-blue.svg)](https://github.com/kaitechvn/Recruitment-App)
+[![Phone](https://img.shields.io/badge/contact-+8436782589-lightblue.svg)](tel:+8436782589)
+[![Email](https://img.shields.io/badge/email-khaibui2604%40gmail.com-red.svg)](mailto:khaibui2604@gmail.com)
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -9,8 +11,8 @@
 - [Architecture](#architecture)
 - [Features](#features)
 - [Installation](#installation)
-- [Example usage](#example usage)
-- [Link and screenshot](#link and screenshot)
+- [Demo](#demo) 
+
 
 ## Introduction
 This project focuses on the recruitment domain, aiming to design and implement a comprehensive API system for managing various recruitment-related operations.
@@ -60,7 +62,8 @@ Follow these steps to get the project up and running on your local machine. Use 
    ```bash
    $ docker compose up -d 
    ```
-**3. Add data to MySQL and MongoDB**
+**3. Add data config to MySQL and MongoDB**
+
 *MySQL*
    ```bash
    $ docker exec -i recruitment-app-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
@@ -86,7 +89,32 @@ Follow these steps to get the project up and running on your local machine. Use 
    $ java -jar target/recruitment-0.0.1-SNAPSHOT.jar
    ```
 
-**5. Example usage**
+## Demo
+Use Postman or Curl through terminal for http request
+```bash
+curl -X POST \
+  http://localhost:8080/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "username": "admin",
+    "password": "adminpassword"
+}'
+```
+After this, take the token in reponse body to invoke another API request
+
+**Link**
+
+**Swagger UI Documentation for API** http://localhost:8080/swagger-ui/index.html
+
+![image](https://github.com/kaitechvn/Recruitment-App/assets/142367662/3d7f3ed7-9ea2-4b9f-9837-a1926aa79fa3)
+
+**Grafana UI Monitoring application system** http://localhost:3000/
+
+**Prothemeus UI Metric** http://localhost:9090/
+
+
+
+
 
 
      
