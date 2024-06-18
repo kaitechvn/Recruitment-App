@@ -24,7 +24,7 @@ It serves as a mock project intended to enhance backend programming skills and p
 [![MySQL Badge](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Redis Badge](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
 
-- **Java** - version 22 
+- **Java** - version 17 
 - **Spring Boot** - version 3.2.5
 - **Spring Securiy** - version 3.2.5 
 - **MySQL** - version 8.0.36
@@ -45,7 +45,7 @@ It serves as a mock project intended to enhance backend programming skills and p
 Follow these steps to get the project up and running on your local machine. Use your command line for setting up
 
 ### Prerequisites
-- Java 22
+- Java 17 or higher
 - MySQL 
 - Mongosh - for MongoDB
 - Maven 
