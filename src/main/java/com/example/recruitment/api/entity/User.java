@@ -1,9 +1,8 @@
 package com.example.recruitment.api.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-
 public class User implements UserDetails {
 
   @Id

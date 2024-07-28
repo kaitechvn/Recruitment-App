@@ -1,15 +1,15 @@
 package com.example.recruitment.api.service.resume;
 
+import com.example.recruitment.api.entity.*;
+import com.example.recruitment.common.data_transform.Converter;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.common.code.ErrorCode;
 import com.example.recruitment.common.exception.ApiException;
 import com.example.recruitment.api.dto.in.page.PageResumeDtoIn;
 import com.example.recruitment.api.dto.in.ResumeDtoIn;
-import com.example.recruitment.api.dto.in.UpdateResumeDtoIn;
 import com.example.recruitment.api.dto.out.pagedata.DataResume;
 import com.example.recruitment.api.dto.out.ResumeDtoOut;
-import com.example.recruitment.api.entity.Resume;
-import com.example.recruitment.api.mapper.Mapper;
+import com.example.recruitment.api.mapper.ResumeMapper;
 import com.example.recruitment.api.repository.FieldRepository;
 import com.example.recruitment.api.repository.ProvinceRepository;
 import com.example.recruitment.api.repository.ResumeRepository;
@@ -29,85 +29,56 @@ import java.util.stream.Collectors;
 @Service
 public class ResumeServiceImpl implements ResumeService {
 
-  @Autowired
-  private ResumeRepository resumeRepository;
+  private final ResumeRepository resumeRepository;
+  private final ProvinceRepository provinceRepository;
+  private final FieldRepository fieldRepository;
+  private final SeekerRepository seekerRepository;
+  private final ResumeMapper resumeMapper = ResumeMapper.INSTANCE;
 
   @Autowired
-  private ProvinceRepository provinceRepository;
-
-  @Autowired
-  private FieldRepository fieldRepository;
-
-  @Autowired
-  private SeekerRepository seekerRepository;
+  public ResumeServiceImpl(ResumeRepository resumeRepository, ProvinceRepository provinceRepository, FieldRepository fieldRepository, SeekerRepository seekerRepository) {
+    this.resumeRepository = resumeRepository;
+    this.provinceRepository = provinceRepository;
+    this.fieldRepository = fieldRepository;
+    this.seekerRepository = seekerRepository;
+  }
 
   @Override
   public ResumeDtoOut get(Integer id) {
-    Resume resume= this.resumeRepository.findById(id)
+    Resume resume = this.resumeRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "resume not found"));
 
-    return ResumeDtoOut.fromResume(resume);
+    return mapResumeDtoOut(resume);
   }
 
   @Override
   public ResumeDtoOut create(ResumeDtoIn dto) {
-
-    for (Integer id : dto.getProvinceIds()) {
-      if (!provinceRepository.existsById(id)) {
-        throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "province ID " + id + " not found");
-      }
-    }
-
-    for (Integer id : dto.getFieldIds()) {
-      if (!fieldRepository.existsById(id)) {
-        throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "field ID " + id + " not found");
-      }
-    }
-
-    if (!seekerRepository.existsById(dto.getSeekerId())) {
-      throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found");
-    }
-
-    Resume newResume = this.resumeRepository.save(Resume.fromDto(dto));
-    return ResumeDtoOut.fromResume(newResume);
-    }
-
+    validateDto(dto.getProvinceIds(), dto.getFieldIds(), dto.getSeekerId());
+    Resume newResume = this.resumeRepository.save(resumeMapper.toResume(dto));
+    return mapResumeDtoOut(newResume);
+  }
 
   @Override
-  public ResumeDtoOut update(Integer id, UpdateResumeDtoIn dto) {
-    Resume updatingResume= this.resumeRepository.findById(id)
+  public ResumeDtoOut update(Integer id, ResumeDtoIn dto) {
+    Resume updatingResume = this.resumeRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "resume not found"));
 
-    if(!dto.getProvinceIds().isEmpty()) {
-      for (Integer pid : dto.getProvinceIds()) {
-        if (!provinceRepository.existsById(id)) {
-          throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "province ID " + pid + " not found");
-        }
-      }
+    if (!dto.getProvinceIds().isEmpty()) {
+      validateDto(dto.getProvinceIds(), dto.getFieldIds(), dto.getSeekerId());
     }
 
-    if(!dto.getFieldIds().isEmpty()) {
-      for (Integer fid : dto.getFieldIds()) {
-        if (!fieldRepository.existsById(id)) {
-          throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "field ID " + fid + " not found");
-        }
-      }
-    }
-
-    Mapper.UpdateNonNull(dto, updatingResume); // Not null field update
     Resume updatedResume = this.resumeRepository.save(updatingResume);
 
-    return ResumeDtoOut.fromResume(updatedResume);
-    }
+    return mapResumeDtoOut(updatedResume);
+  }
 
   @Override
   public ResumeDtoOut delete(Integer id) {
-    Resume resume= this.resumeRepository.findById(id)
+    Resume resume = this.resumeRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "resume not found"));
 
-    ResumeDtoOut resumeDtoOut = ResumeDtoOut.fromResume(resume);
     this.resumeRepository.delete(resume);
-    return resumeDtoOut;
+    return mapResumeDtoOut(resume);
   }
 
   @Override
@@ -120,11 +91,51 @@ public class ResumeServiceImpl implements ResumeService {
       resumeRepository.findAllBySeekerId(dto.getSeekerId(), paging);
 
     List<DataResume> dataResumeList = pagedResult.getContent().stream()
-      .map(DataResume::fromResume).sorted(Comparator
+      .map(resumeMapper::toDataResume)
+      .sorted(Comparator
         .comparing(DataResume::getTitle, Comparator.nullsLast(Comparator.naturalOrder()))
-        .thenComparing(DataResume::getSeekerName, Comparator.nullsLast(Comparator.naturalOrder()))).collect(Collectors.toList());
+        .thenComparing(DataResume::getSeekerName, Comparator.nullsLast(Comparator.naturalOrder())))
+      .collect(Collectors.toList());
 
-    return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
-        dataResumeList);
+    return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(), dataResumeList);
+  }
+
+  private void validateDto(List<Integer> provinceIds, List<Integer> fieldIds, Integer seekerId) {
+    for (Integer id : provinceIds) {
+      if (!provinceRepository.existsById(id)) {
+        throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "province ID " + id + " not found");
+      }
+    }
+
+    for (Integer id : fieldIds) {
+      if (!fieldRepository.existsById(id)) {
+        throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "field ID " + id + " not found");
+      }
+    }
+
+    if (seekerId != null && !seekerRepository.existsById(seekerId)) {
+      throw new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found");
+    }
+  }
+
+  private ResumeDtoOut mapResumeDtoOut(Resume resume) {
+
+    ResumeDtoOut resumeDtoOut = resumeMapper.toResumeDtoOut(resume);
+
+    List<Integer> provinceIds = Converter.extractIdFromStringDb(resume.getProvinces());
+    List<Province> province = provinceRepository.findAllById(provinceIds);
+
+    List<Integer> fieldIds = Converter.extractIdFromStringDb(resume.getFields());
+    List<Field> field = fieldRepository.findAllById(fieldIds);
+
+    String seekerName = seekerRepository.findById(resume.getSeekerId())
+      .map(Seeker::getName)
+      .orElse(null);
+
+    resumeDtoOut.setProvinces(province);
+    resumeDtoOut.setFields(field);
+    resumeDtoOut.setSeekerName(seekerName);
+
+    return resumeDtoOut;
   }
 }

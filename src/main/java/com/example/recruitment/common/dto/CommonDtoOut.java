@@ -1,15 +1,13 @@
 package com.example.recruitment.common.dto;
 
 import com.example.recruitment.common.code.ErrorCode;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Builder
 public class CommonDtoOut<T> {
     private Integer errorCode;
