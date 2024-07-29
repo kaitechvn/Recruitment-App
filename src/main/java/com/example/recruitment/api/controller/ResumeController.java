@@ -4,7 +4,6 @@ import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.api.dto.in.page.PageResumeDtoIn;
 import com.example.recruitment.api.dto.in.ResumeDtoIn;
-import com.example.recruitment.api.dto.in.UpdateResumeDtoIn;
 import com.example.recruitment.api.dto.out.pagedata.DataResume;
 import com.example.recruitment.api.dto.out.ResumeDtoOut;
 import com.example.recruitment.api.service.resume.ResumeService;
@@ -55,7 +54,7 @@ public class ResumeController {
   @PutMapping("{id}")
   public ResponseEntity<CommonDtoOut<ResumeDtoOut>> update(
     @Parameter(description = "ID of the resume to update information for", required = true) @PathVariable("id") Integer id,
-    @Parameter(description = "Updated information of the resume", required = true) @RequestBody UpdateResumeDtoIn dtoIn) {
+    @Parameter(description = "Updated information of the resume", required = true) @RequestBody ResumeDtoIn dtoIn) {
     CommonDtoOut<ResumeDtoOut> dtoOut = CommonDtoOut.success(resumeService.update(id, dtoIn));
     return new ResponseEntity<>(dtoOut, HttpStatus.valueOf(dtoOut.getStatusCode()));
   }

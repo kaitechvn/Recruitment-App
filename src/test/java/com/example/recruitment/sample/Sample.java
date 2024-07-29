@@ -2,7 +2,6 @@ package com.example.recruitment.sample;
 
 import com.example.recruitment.api.dto.in.EmployerDtoIn;
 import com.example.recruitment.api.dto.in.JobDtoIn;
-import com.example.recruitment.api.dto.in.UpdateEmployerDtoIn;
 import com.example.recruitment.api.dto.in.page.PageEmployerDtoIn;
 import com.example.recruitment.api.dto.in.page.PageJobDtoIn;
 import com.example.recruitment.api.entity.Employer;

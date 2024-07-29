@@ -1,9 +1,9 @@
 package com.example.recruitment.api.controller;
 
+import com.example.recruitment.api.dto.in.update.UpdateEmployerDto;
 import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.api.dto.in.EmployerDtoIn;
 import com.example.recruitment.api.dto.in.page.PageEmployerDtoIn;
-import com.example.recruitment.api.dto.in.UpdateEmployerDtoIn;
 import com.example.recruitment.api.dto.out.pagedata.DataEmployer;
 import com.example.recruitment.api.dto.out.EmployerDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
@@ -66,7 +66,7 @@ public class EmployerController {
   @PutMapping("/{id}")
   public ResponseEntity<CommonDtoOut<EmployerDtoOut>> update(
     @Parameter(description = "ID of the employer to update information for", required = true) @PathVariable("id") Integer id,
-    @Valid @RequestBody UpdateEmployerDtoIn dto) {
+    @Valid @RequestBody UpdateEmployerDto dto) {
     CommonDtoOut<EmployerDtoOut> dtoOut = CommonDtoOut.success(this.employerService.update(id, dto));
     return ResponseEntity
       .status(HttpStatus.valueOf(dtoOut.getStatusCode()))

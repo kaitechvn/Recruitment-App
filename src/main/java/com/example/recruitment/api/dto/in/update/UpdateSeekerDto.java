@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeekerDtoIn {
+public class UpdateSeekerDto {
   @NotBlank
   private String name;
 

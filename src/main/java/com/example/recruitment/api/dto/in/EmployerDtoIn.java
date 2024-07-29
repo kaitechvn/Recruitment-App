@@ -27,6 +27,4 @@ public class EmployerDtoIn {
     @SensitiveWord(lang = "vn")
     private String description;
 
-
-
 }

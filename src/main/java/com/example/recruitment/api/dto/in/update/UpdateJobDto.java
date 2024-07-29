@@ -1,11 +1,13 @@
-package com.example.recruitment.api.dto.out;
+package com.example.recruitment.api.dto.in;
 
-import com.example.recruitment.api.entity.Field;
-import com.example.recruitment.api.entity.Province;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,15 +16,17 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 
-public class JobDtoOut {
-  private Integer id;
+public class UpdateJobDto {
+
   private String title;
+  @NotNull
+  private Integer employerId;
   private Integer quantity;
   private String description;
-  private List<Field> fields;
-  private List<Province> provinces;
+  @NotEmpty
+  private List<Integer> fieldIds ;
+  @NotEmpty
+  private List<Integer> provinceIds;
   private Integer salary;
   private Date expiredAt;
-  private Integer employerId;
-  private String employerName;
 }

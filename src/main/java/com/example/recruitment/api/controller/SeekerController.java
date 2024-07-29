@@ -1,5 +1,6 @@
 package com.example.recruitment.api.controller;
 
+import com.example.recruitment.api.dto.in.UpdateSeekerDto;
 import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.api.dto.in.page.PageSeekerDtoIn;
@@ -24,8 +25,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/seeker")
 public class SeekerController {
 
+  private final SeekerService seekerService;
+
   @Autowired
-  private SeekerService seekerService;
+  public SeekerController(SeekerService seekerService) {
+    this.seekerService = seekerService;
+  }
 
   @Operation(summary = "Get seeker information by ID")
   @ApiResponse(responseCode = "200", description = "Success")
@@ -54,7 +59,7 @@ public class SeekerController {
   @PutMapping("{id}")
   public ResponseEntity<CommonDtoOut<SeekerDtoOut>> update(
     @Parameter(description = "ID of the seeker to update information for", required = true) @PathVariable("id") Integer id,
-    @Parameter(description = "Updated information of the seeker", required = true) @RequestBody SeekerDtoIn dtoIn) {
+    @Parameter(description = "Updated information of the seeker", required = true) @RequestBody UpdateSeekerDto dtoIn) {
     CommonDtoOut<SeekerDtoOut> dtoOut = CommonDtoOut.success(seekerService.update(id, dtoIn));
     return new ResponseEntity<>(dtoOut, HttpStatus.valueOf(dtoOut.getStatusCode()));
   }

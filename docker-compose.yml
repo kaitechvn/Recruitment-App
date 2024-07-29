@@ -1,17 +1,17 @@
 version: '3.3'
 
-
 services:
-  mysql-db:
+  mysql:
     image: mysql:8.0.33
     environment:
       MYSQL_ROOT_PASSWORD: Khai2604@
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+      MYSQL_DATABASE: job_db
     ports:
       - '3306:3306'
     volumes:
-      - mysql-db:/var/lib/mysql
+      - mysql:/var/lib/mysql
     restart: on-failure
 
   redis:
@@ -56,10 +56,37 @@ services:
       - mongodb:/data/db
     restart: on-failure
 
+  app:
+    image: my-spring-boot-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+      - mongodb
+      - redis
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Khai2604@
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/job_db?serverTimezone=UTC
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=user
+      - SPRING_DATA_MONGODB_PASSWORD=User123
+      - SPRING_DATA_MONGODB_DATABASE=sample_db
+      - SPRING_CACHE_TYPE=redis
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_PASSWORD=Redis@123
+
 volumes:
   grafana:
     driver: local
   mongodb:
     driver: local
-  mysql-db:
+  mysql:
     driver: local

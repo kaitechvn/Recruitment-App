@@ -1,22 +1,15 @@
 package com.example.recruitment.api.entity;
 
-import com.example.recruitment.common.data_transform.Converter;
-import com.example.recruitment.api.dto.in.JobDtoIn;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-
+@Getter
+@Setter
 @Entity
 @Table(name = "jobs")
 public class Job {
@@ -35,25 +28,15 @@ public class Job {
   private String provinces;
 
   @CreationTimestamp
-  private Date created_at;
+  @Column(name = "created_at")
+  private LocalDate createdAt;
+
   @UpdateTimestamp
-  private Date updated_at;
+  @Column(name = "updated_at")
+  private LocalDate updatedAt;
+
 
   @Column(name = "expired_at")
-  private Date expiredAt;
-
-
-  public static Job fromDto(JobDtoIn dto) {
-    return Job.builder()
-      .employerId(dto.getEmployerId())
-      .title(dto.getTitle())
-      .quantity(dto.getQuantity())
-      .description(dto.getDescription())
-      .salary(dto.getSalary())
-      .fields(Converter.ListToStringDb(dto.getFieldIds()))
-      .provinces(Converter.ListToStringDb(dto.getProvinceIds()))
-      .expiredAt(dto.getExpiredAt())
-      .build();
-  }
+  private LocalDate expiredAt;
 
 }

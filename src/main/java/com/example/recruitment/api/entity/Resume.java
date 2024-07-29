@@ -1,22 +1,15 @@
 package com.example.recruitment.api.entity;
 
-import com.example.recruitment.common.data_transform.Converter;
-import com.example.recruitment.api.dto.in.ResumeDtoIn;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-
+@Getter
+@Setter
 @Entity
 @Table(name = "resume")
 public class Resume {
@@ -36,20 +29,11 @@ public class Resume {
   private String provinces;
 
   @CreationTimestamp
-  private Date created_at;
+  @Column(name = "created_at")
+  private LocalDate createdAt;
+
   @UpdateTimestamp
-  private Date updated_at;
-
-  public static Resume fromDto(ResumeDtoIn dto) {
-      return Resume.builder()
-        .seekerId(dto.getSeekerId())
-        .careerObj(dto.getCareerObj())
-        .salary(dto.getSalary())
-        .title(dto.getTitle())
-        .fields(Converter.ListToStringDb(dto.getFieldIds()))
-        .provinces(Converter.ListToStringDb(dto.getProvinceIds()))
-        .build();
-
-  }
+  @Column(name = "updated_at")
+  private LocalDate updatedAt;
 
 }

@@ -1,8 +1,9 @@
 package com.example.recruitment.api.service.seeker;
 
-import com.example.recruitment.common.data_transform.Update;
+import com.example.recruitment.api.dto.in.UpdateSeekerDto;
+import com.example.recruitment.api.entity.Province;
+import com.example.recruitment.api.mapper.SeekerMapper;
 import com.example.recruitment.common.dto.PageDtoOut;
-
 import com.example.recruitment.common.code.ErrorCode;
 import com.example.recruitment.common.exception.ApiException;
 import com.example.recruitment.api.dto.in.page.PageSeekerDtoIn;
@@ -23,44 +24,47 @@ import org.springframework.stereotype.Service;
 @Service
 public class SeekerServiceImpl implements SeekerService{
 
-  @Autowired
-  private SeekerRepository seekerRepository;
+  private final SeekerRepository seekerRepository;
+  private final ProvinceRepository provinceRepository;
+  private final SeekerMapper seekerMapper = SeekerMapper.INSTANCE;
 
   @Autowired
-  private ProvinceRepository provinceRepository;
+  public SeekerServiceImpl(SeekerRepository seekerRepository,
+                           ProvinceRepository provinceRepository) {
+    this.seekerRepository = seekerRepository;
+    this.provinceRepository = provinceRepository;
+  }
 
   @Override
   public SeekerDtoOut get(Integer id) {
     Seeker seeker = this.seekerRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found"));
 
-    return SeekerDtoOut.fromSeeker(seeker);
+    return mapSeekerToDto(seeker);
 
   }
 
   @Override
   public SeekerDtoOut create(SeekerDtoIn dto) {
-    this.provinceRepository.findById(dto.getProvince())
+    this.provinceRepository.findById(dto.getProvinceId())
       .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "province not found"));
 
-    Seeker addSeeker = this.seekerRepository.save(Seeker.fromDto(dto));
-    SeekerDtoOut seekerDtoOut = SeekerDtoOut.fromSeeker(addSeeker);
-    return seekerDtoOut;
+    Seeker addSeeker = this.seekerRepository.save(seekerMapper.toSeeker(dto));
+
+    return mapSeekerToDto(addSeeker);
 
   }
 
   @Override
-  public SeekerDtoOut update(Integer id, SeekerDtoIn dto) {
-    Seeker updatingSeeker = this.seekerRepository.findById(id)
-      .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found"));
+  public SeekerDtoOut update(Integer id, UpdateSeekerDto dto) {
+    Seeker existingSeeker = seekerRepository.findById(id)
+      .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));
 
-    this.provinceRepository.findById(dto.getProvince())
-      .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, "province not found"));
+    seekerMapper.toUpdateSeeker(dto, existingSeeker);
 
-    Update.copyIgnoreNull(dto, updatingSeeker); // not null field update
-    Seeker toUpdateSeeker = this.seekerRepository.save(updatingSeeker);
-    SeekerDtoOut seekerDtoOut = SeekerDtoOut.fromSeeker(toUpdateSeeker);
-    return seekerDtoOut;
+    Seeker updatedSeeker = seekerRepository.save(existingSeeker);
+
+    return mapSeekerToDto(updatedSeeker);
 
     }
 
@@ -69,9 +73,8 @@ public class SeekerServiceImpl implements SeekerService{
     Seeker seeker = this.seekerRepository.findById(id)
       .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "seeker not found"));
 
-    SeekerDtoOut seekerDtoOut = SeekerDtoOut.fromSeeker(seeker);
     this.seekerRepository.delete(seeker);
-    return seekerDtoOut;
+    return mapSeekerToDto(seeker);
 
   }
 
@@ -86,6 +89,19 @@ public class SeekerServiceImpl implements SeekerService{
       }
 
       return PageDtoOut.from(dto.getPage(), dto.getPageSize(), pagedResult.getTotalElements(),
-          pagedResult.stream().map(DataSeeker::fromSeeker).toList());
+          pagedResult.stream().map(seeker -> seekerMapper.toDataSeeker(seeker)).toList());
     }
+
+    public SeekerDtoOut mapSeekerToDto(Seeker seeker) {
+    SeekerDtoOut seekerDtoOut = seekerMapper.toSeekerDtoOut(seeker);
+
+      String provinceName = provinceRepository.findById(seeker.getProvince())
+        .map(Province::getName)
+        .orElse(null);
+
+      seekerDtoOut.setProvinceName(provinceName);
+
+      return seekerDtoOut;
+    }
+
   }
