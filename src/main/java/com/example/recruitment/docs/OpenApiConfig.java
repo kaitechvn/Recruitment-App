@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(info = @Info
                    (contact = @Contact(name = "Khai Bui",
                                        email = "quockhaihn@gmail.com",
-                                       url = "http://kaitech.dev.vn"),
+                                       url = "https://kaitech.dev.vn"),
                    version = "1.0.0",
                    title = "API doc for recruitment project"),
                    servers = {@Server(url = "http://localhost:8080", description = "LOCAL ENV"),

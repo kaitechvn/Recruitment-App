@@ -28,9 +28,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ALL")
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
   @Autowired
   private SentryException sentryException;
 

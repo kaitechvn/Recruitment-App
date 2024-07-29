@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,19 +36,20 @@ import java.security.interfaces.RSAPublicKey;
 
 public class SecurityConfig {
 
-  @Autowired
-  @Qualifier("customUnauthorizedEntryPoint")
-  private AuthenticationEntryPoint authEntryPoint;
-
-  @Autowired
-  @Qualifier("customForbiddenEntryPoint")
-  private AccessDeniedHandler forbiddenEntryPoint;
+  private final AuthenticationEntryPoint authEntryPoint;
+  private final AccessDeniedHandler forbiddenEntryPoint;
 
   @Value("${jwt.public-key-path}")
   private Resource publicKeyResource;
 
   @Value("${jwt.private-key-path}")
   private Resource privateKeyResource;
+
+  @Autowired
+  public SecurityConfig(@Qualifier("customUnauthorizedEntryPoint") AuthenticationEntryPoint authEntryPoint, @Qualifier("customForbiddenEntryPoint") AccessDeniedHandler forbiddenEntryPoint) {
+    this.authEntryPoint = authEntryPoint;
+    this.forbiddenEntryPoint = forbiddenEntryPoint;
+  }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

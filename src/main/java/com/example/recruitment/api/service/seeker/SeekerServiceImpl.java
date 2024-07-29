@@ -1,10 +1,8 @@
 package com.example.recruitment.api.service.seeker;
 
 import com.example.recruitment.api.dto.in.UpdateSeekerDto;
-import com.example.recruitment.api.entity.Employer;
 import com.example.recruitment.api.entity.Province;
 import com.example.recruitment.api.mapper.SeekerMapper;
-import com.example.recruitment.common.data_transform.Update;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.common.code.ErrorCode;
 import com.example.recruitment.common.exception.ApiException;
