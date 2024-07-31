@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class RedisConfig {
     RedisCacheConfiguration defaultCacheConfig = createCacheConfiguration(Duration.ofMinutes(3));
 
     Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
-    cacheConfigurations.put("loginAttempts", createCacheConfiguration(Duration.ofSeconds(60)));
+    cacheConfigurations.put("loginAttempts", createCacheConfiguration(Duration.ofSeconds(30)));
     cacheConfigurations.put("accountLock", createCacheConfiguration(Duration.ofMinutes(2)));
 
     return RedisCacheManager.builder(redisConnectionFactory)

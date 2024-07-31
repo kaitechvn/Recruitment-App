@@ -4,12 +4,15 @@ import com.example.recruitment.api.dto.in.EmployerDtoIn;
 import com.example.recruitment.api.dto.in.JobDtoIn;
 import com.example.recruitment.api.dto.in.page.PageEmployerDtoIn;
 import com.example.recruitment.api.dto.in.page.PageJobDtoIn;
+import com.example.recruitment.api.dto.in.update.UpdateEmployerDto;
 import com.example.recruitment.api.entity.Employer;
 import com.example.recruitment.api.entity.Job;
 import com.example.recruitment.api.entity.User;
 import com.github.javafaker.Faker;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,9 +37,17 @@ public class Sample {
     Integer province = faker.number().numberBetween(1, 10); // Example province number
     String description = faker.lorem().sentence();
     Date createdAt = faker.date().past(365, TimeUnit.DAYS);
-    Date updatedAt = faker.date().past(30, TimeUnit.DAYS); // Updated within the last month
+    Date updatedAt = faker.date().past(30, TimeUnit.DAYS);
 
-    return new Employer(id, email, name, province, description, createdAt, updatedAt);
+    LocalDate createAtLocal = createdAt.toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDate();
+
+    LocalDate updateAtLocal = createdAt.toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDate();
+
+    return new Employer(id, email, name, province, description, createAtLocal, updateAtLocal);
   }
 
   public static EmployerDtoIn generateEmployerDto() {
@@ -50,14 +61,14 @@ public class Sample {
     return new EmployerDtoIn(email, name, provinceId, description);
   }
 
-  public static UpdateEmployerDtoIn generateUpdateEmployerDto() {
+  public static UpdateEmployerDto generateUpdateEmployerDto() {
     Faker faker = new Faker();
 
     String name = faker.company().name();
     Integer provinceId = faker.number().numberBetween(1, 10); // Example provinceId
     String description = faker.lorem().sentence();
 
-    return new UpdateEmployerDtoIn(name, provinceId, description);
+    return new UpdateEmployerDto(name, provinceId, description);
   }
 
   public static PageEmployerDtoIn generateEmployerPageDto() {
@@ -81,9 +92,6 @@ public class Sample {
     job.setSalary(faker.number().numberBetween(1000, 5000));
     job.setFields(generateFields());
     job.setProvinces(generateProvinces());
-    job.setCreated_at(new Date());
-    job.setUpdated_at(new Date());
-    job.setExpiredAt(new Date(System.currentTimeMillis() + faker.number().numberBetween(86400000, 604800000))); // Set expiredAt between 1 and 7 days from now
 
     return job;
   }
@@ -131,18 +139,14 @@ public class Sample {
 
   private static String generateFields() {
     Faker faker = new Faker();
-    StringBuilder fields = new StringBuilder();
-    fields.append("-").append(faker.number().numberBetween(1, 10)).append("-");
-    fields.append(faker.number().numberBetween(1, 10)).append("-");
-    return fields.toString();
+    return "-" + faker.number().numberBetween(1, 10) + "-" +
+      faker.number().numberBetween(1, 10) + "-";
   }
 
   private static String generateProvinces() {
     Faker faker = new Faker();
-    StringBuilder provinces = new StringBuilder();
-    provinces.append("-").append(faker.number().numberBetween(1, 10)).append("-");
-    provinces.append(faker.number().numberBetween(1, 10)).append("-");
-    return provinces.toString();
+    return "-" + faker.number().numberBetween(1, 10) + "-" +
+      faker.number().numberBetween(1, 10) + "-";
   }
 
   public static User generateSampleActiveUser(String rawPassword) {

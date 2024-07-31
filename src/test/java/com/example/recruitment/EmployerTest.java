@@ -1,6 +1,7 @@
 package com.example.recruitment;
 
 import com.example.recruitment.api.dto.in.AuthLoginDtoIn;
+import com.example.recruitment.api.dto.in.update.UpdateEmployerDto;
 import com.example.recruitment.common.dto.CommonDtoOut;
 import com.example.recruitment.api.dto.in.EmployerDtoIn;
 import com.example.recruitment.api.dto.in.page.PageEmployerDtoIn;
@@ -37,9 +38,6 @@ public class EmployerTest {
 
     @Autowired
     private TestRestTemplate template;
-
-//    @LocalServerPort
-//    int "8080";
 
     private Employer testEmployer;
     private String testToken;
@@ -90,7 +88,7 @@ public class EmployerTest {
         EmployerDtoIn reqBody = Sample.generateEmployerDto();
 
         HttpHeaders headers = new HttpHeaders();
-      headers.setBearerAuth(testToken);
+        headers.setBearerAuth(testToken);
 
         HttpEntity<EmployerDtoIn> request = new HttpEntity<>(reqBody, headers);
         ResponseEntity<String> result = this.template.postForEntity(uri, request, String.class);
@@ -110,11 +108,11 @@ public class EmployerTest {
       final String endpoint ="http://localhost:"+"8080"+"/employer/" + testEmployer.getId().toString();
       URI uri = new URI(endpoint);
 
-      UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
+      UpdateEmployerDto reqBody = Sample.generateUpdateEmployerDto();
       HttpHeaders headers = new HttpHeaders();
       headers.setBearerAuth(testToken);
 
-      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody, headers);
+      HttpEntity<UpdateEmployerDto> request = new HttpEntity<>(reqBody, headers);
       ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.PUT, request, String.class);
 
       assertEquals(200, result.getStatusCodeValue());
@@ -126,11 +124,11 @@ public class EmployerTest {
       final String endpoint ="http://localhost:"+"8080"+"/employer/" + idUri;
       URI uri = new URI(endpoint);
 
-      UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
+      UpdateEmployerDto reqBody = Sample.generateUpdateEmployerDto();
       HttpHeaders headers = new HttpHeaders();
       headers.setBearerAuth(testToken);
 
-      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(reqBody, headers);
+      HttpEntity<UpdateEmployerDto> request = new HttpEntity<>(reqBody, headers);
       ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.PUT, request, String.class);
 
       assertEquals(404, result.getStatusCodeValue());
@@ -143,7 +141,7 @@ public class EmployerTest {
 
       HttpHeaders headers = new HttpHeaders();
       headers.setBearerAuth(testToken);
-      HttpEntity<UpdateEmployerDtoIn> request = new HttpEntity<>(headers);
+      HttpEntity<UpdateEmployerDto> request = new HttpEntity<>(headers);
 
       ResponseEntity<String> result = this.template.exchange(uri, HttpMethod.DELETE, request, String.class);
       assertEquals(200, result.getStatusCodeValue());
@@ -244,8 +242,8 @@ public class EmployerTest {
     HttpEntity<String> requestGet = new HttpEntity<>(headers);
     ResponseEntity<String> response1 = this.template.exchange(uri, HttpMethod.GET, requestGet, String.class);
 
-    UpdateEmployerDtoIn reqBody = Sample.generateUpdateEmployerDto();
-    HttpEntity<UpdateEmployerDtoIn> requestPut = new HttpEntity<>(reqBody,headers);
+    UpdateEmployerDto reqBody = Sample.generateUpdateEmployerDto();
+    HttpEntity<UpdateEmployerDto> requestPut = new HttpEntity<>(reqBody,headers);
 
     ResponseEntity<String> response2 = this.template.exchange(uri, HttpMethod.PUT, requestPut, String.class);
 
