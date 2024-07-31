@@ -1,14 +1,13 @@
 package com.example.recruitment.api.entity;
 
-import com.example.recruitment.api.dto.in.EmployerDtoIn;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDate;
-import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity

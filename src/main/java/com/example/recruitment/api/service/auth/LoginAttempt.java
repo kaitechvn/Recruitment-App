@@ -19,7 +19,7 @@ public class LoginAttempt {
 
   @Cacheable(value = "loginAttempts", key = "#username")
   public Integer getLoginAttempts(String username) {
-    return 1;
+    return 0;
   }
 
   @CachePut(value = "loginAttempts", key = "#username")
@@ -45,6 +45,6 @@ public class LoginAttempt {
 
   @CachePut(value = "accountLock", key = "#username")
   public Boolean checkAndHandleLock(String username, Integer attempts) {
-    return attempts > MAX_ATTEMPTS;
+    return attempts >= MAX_ATTEMPTS;
   }
 }
