@@ -65,7 +65,6 @@ Follow these steps to get the project up and running on your local machine. Use 
 
 *MySQL*
    ```bash
-   $ docker exec -i recruitment-mysql-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
    $ docker exec -i recruitment-mysql-1 sh -c 'exec mysql -uroot -p"Khai2604@" job_db' < recruitment.sql
    ```
 *MongoDB*
