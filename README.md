@@ -65,12 +65,12 @@ Follow these steps to get the project up and running on your local machine. Use 
 
 *MySQL*
    ```bash
-   $ docker exec -i recruitment-app-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
-   $ docker exec -i recruitment-app-mysql-db-1 sh -c 'exec mysql -uroot -p"Khai2604@" job_db' < recruitment.sql
+   $ docker exec -i recruitment-mysql-1 sh -c 'exec mysql -uroot -p"Khai2604@" -e "CREATE DATABASE job_db;"'
+   $ docker exec -i recruitment-mysql-1 sh -c 'exec mysql -uroot -p"Khai2604@" job_db' < recruitment.sql
    ```
 *MongoDB*
    ```bash
-   $ docker exec -it recruitment-app-mongodb-1 mongosh --username root --password Mongo@123 --authenticationDatabase admin
+   $ docker exec -it recruitment-mongodb-1 mongosh --username root --password Mongo@123 --authenticationDatabase admin
    use sample_db
    ```
    ```bash
@@ -79,13 +79,6 @@ Follow these steps to get the project up and running on your local machine. Use 
    pwd: 'User123',
    roles: [{ role: 'readWrite', db: 'sample_db' }]
    });
-   ```
-
-   
-**4. Run the application**
-   ```bash
-   $ mvn clean install
-   $ java -jar target/recruitment-0.0.1-SNAPSHOT.jar
    ```
 
 ## Demo
