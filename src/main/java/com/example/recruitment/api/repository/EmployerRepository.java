@@ -24,7 +24,7 @@ public interface EmployerRepository extends JpaRepository<Employer, Integer> {
   @Cacheable(value = "employer", key = "#paging")
   Page<Employer> findAll(Pageable paging);
 
-  @Cacheable(value = "employer", key = "id")
+  @Cacheable(value = "employer", key = "#id")
   Optional<Employer> findById(Integer id);
 
   @Override

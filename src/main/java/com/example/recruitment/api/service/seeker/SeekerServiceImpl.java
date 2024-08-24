@@ -13,6 +13,7 @@ import com.example.recruitment.api.dto.out.SeekerDtoOut;
 import com.example.recruitment.api.entity.Seeker;
 import com.example.recruitment.api.repository.ProvinceRepository;
 import com.example.recruitment.api.repository.SeekerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,18 +23,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SeekerServiceImpl implements SeekerService{
 
   private final SeekerRepository seekerRepository;
   private final ProvinceRepository provinceRepository;
   private final SeekerMapper seekerMapper = SeekerMapper.INSTANCE;
-
-  @Autowired
-  public SeekerServiceImpl(SeekerRepository seekerRepository,
-                           ProvinceRepository provinceRepository) {
-    this.seekerRepository = seekerRepository;
-    this.provinceRepository = provinceRepository;
-  }
 
   @Override
   public SeekerDtoOut get(Integer id) {

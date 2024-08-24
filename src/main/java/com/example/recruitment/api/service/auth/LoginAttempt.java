@@ -4,18 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class LoginAttempt {
   private static final Integer MAX_ATTEMPTS = 5;
-  private final RedisCacheManager redisCacheManager;
+
+  private final RedisTemplate<String, Object> redisTemplate;
 
   @Autowired
-  public LoginAttempt(RedisCacheManager redisCacheManager) {
-    this.redisCacheManager = redisCacheManager;
+  public LoginAttempt(RedisTemplate<String, Object> redisTemplate) {
+    this.redisTemplate = redisTemplate;
   }
+
 
   @Cacheable(value = "loginAttempts", key = "#username")
   public Integer getLoginAttempts(String username) {
@@ -35,6 +39,11 @@ public class LoginAttempt {
   @Cacheable(value = "accountLock", key = "#username")
   public Boolean isAccountLocked(String username) {
     return false; // Default value when cache is empty
+  }
+
+  public Long getRemainingLockTime(String username) {
+    Long ttl = redisTemplate.getExpire("accountLock::" + username, TimeUnit.SECONDS);
+    return ttl;
   }
 
   // Unlocks the account for the given username

@@ -14,6 +14,7 @@ import com.example.recruitment.api.repository.FieldRepository;
 import com.example.recruitment.api.repository.ProvinceRepository;
 import com.example.recruitment.api.repository.ResumeRepository;
 import com.example.recruitment.api.repository.SeekerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
 
   private final ResumeRepository resumeRepository;
@@ -34,14 +36,6 @@ public class ResumeServiceImpl implements ResumeService {
   private final FieldRepository fieldRepository;
   private final SeekerRepository seekerRepository;
   private final ResumeMapper resumeMapper = ResumeMapper.INSTANCE;
-
-  @Autowired
-  public ResumeServiceImpl(ResumeRepository resumeRepository, ProvinceRepository provinceRepository, FieldRepository fieldRepository, SeekerRepository seekerRepository) {
-    this.resumeRepository = resumeRepository;
-    this.provinceRepository = provinceRepository;
-    this.fieldRepository = fieldRepository;
-    this.seekerRepository = seekerRepository;
-  }
 
   @Override
   public ResumeDtoOut get(Integer id) {

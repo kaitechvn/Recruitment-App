@@ -38,12 +38,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
-  @ExceptionHandler(value = ApiException.class)
-  public ResponseEntity<?> handleApiException(ApiException e) {
-    sentryException.capture(e, e.getHttpStatus());
-    return responseEntity(e.getErrorCode(), e.getHttpStatus(), e.getMessage());
-  }
-
   private ResponseEntity<Object> responseEntity(Integer errorCode, HttpStatusCode statusCode, String msg) {
     return new ResponseEntity<>(
       CommonDtoOut.builder()
@@ -52,6 +46,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         .message(msg)
         .build(),
       statusCode);
+  }
+
+  @ExceptionHandler(value = ApiException.class)
+  public ResponseEntity<?> handleApiException(ApiException e) {
+    sentryException.capture(e, e.getHttpStatus());
+    return responseEntity(e.getErrorCode(), e.getHttpStatus(), e.getMessage());
   }
 
   @Override

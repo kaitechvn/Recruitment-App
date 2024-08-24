@@ -26,14 +26,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-
 public class SecurityConfig {
 
   private final AuthenticationEntryPoint authEntryPoint;
@@ -102,14 +100,6 @@ public class SecurityConfig {
     }
   }
 
-  private static RSAPublicKey readPublicKey(Resource resource) throws Exception {
-    return RsaKeyConverters.x509().convert(resource.getInputStream());
-  }
-
-  private static RSAPrivateKey readPrivateKey(Resource resource) throws Exception {
-    return RsaKeyConverters.pkcs8().convert(resource.getInputStream());
-    }
-
   @Bean
   public JwtAuthenticationConverter jwtAuthConverter() {
     JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
@@ -128,6 +118,14 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  private static RSAPublicKey readPublicKey(Resource resource) throws Exception {
+    return RsaKeyConverters.x509().convert(resource.getInputStream());
+  }
+
+  private static RSAPrivateKey readPrivateKey(Resource resource) throws Exception {
+    return RsaKeyConverters.pkcs8().convert(resource.getInputStream());
   }
 }
 

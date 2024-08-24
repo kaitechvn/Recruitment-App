@@ -4,8 +4,8 @@ import com.example.recruitment.common.code.ErrorCode;
 import com.example.recruitment.common.exception.ApiException;
 import com.example.recruitment.api.dto.in.AuthLoginDtoIn;
 import com.example.recruitment.api.dto.out.AuthLoginDtoOut;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +19,7 @@ import java.time.Instant;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final LoginAttempt loginAttempt;
@@ -26,17 +27,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtEncoder jwtEncoder;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public AuthServiceImpl(UserDetailsService userDetailsService, JwtEncoder jwtEncoder,
-                           PasswordEncoder passwordEncoder, LoginAttempt loginAttempt) {
-      this.userDetailsService = userDetailsService;
-      this.jwtEncoder = jwtEncoder;
-      this.passwordEncoder = passwordEncoder;
-      this.loginAttempt = loginAttempt;
-    }
-
-  @Override
-  public AuthLoginDtoOut login(AuthLoginDtoIn loginDtoIn) {
+    @Override
+    public AuthLoginDtoOut login(AuthLoginDtoIn loginDtoIn) {
     UserDetails userDetails = this.userDetailsService.loadUserByUsername(loginDtoIn.getUsername());
     String username = userDetails.getUsername();
     Integer currentAttempts = loginAttempt.getLoginAttempts(username);
@@ -46,7 +38,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     if (loginAttempt.isAccountLocked(username)) {
-      throw new ApiException(ErrorCode.FORBIDDEN, HttpStatus.FORBIDDEN, "Account is locked for 2 minutes due to too many failed login attempts");
+      Long remainingTime = loginAttempt.getRemainingLockTime(username);
+      String messageReturn = "Account is locked due to too many failed login attempts, try again after " + remainingTime + " seconds";
+      throw new ApiException(ErrorCode.FORBIDDEN, HttpStatus.FORBIDDEN, messageReturn);
     }
 
     if (!passwordEncoder.matches(loginDtoIn.getPassword(), userDetails.getPassword())) {
@@ -64,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
       .build();
   }
 
-  private void handleFailedLoginAttempt(String username, Integer attempts) {
+    private void handleFailedLoginAttempt(String username, Integer attempts) {
     loginAttempt.updateLoginAttempts(username, attempts);
     loginAttempt.checkAndHandleLock(username, attempts + 1);
   }

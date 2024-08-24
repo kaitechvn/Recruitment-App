@@ -13,6 +13,7 @@ import com.example.recruitment.api.dto.out.EmployerDtoOut;
 import com.example.recruitment.common.dto.PageDtoOut;
 import com.example.recruitment.api.entity.Employer;
 import com.example.recruitment.api.repository.EmployerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,20 +23,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EmployerServiceImpl implements EmployerService {
 
   private final ProvinceRepository provinceRepository;
   private final EmployerRepository employerRepository;
-
-  @Autowired
-  public EmployerServiceImpl(EmployerRepository employerRepository, ProvinceRepository provinceRepository) {
-    this.employerRepository = employerRepository;
-    this.provinceRepository = provinceRepository;
-  }
-
   private final EmployerMapper employerMapper = EmployerMapper.INSTANCE;
 
-  @Override
+    @Override
     public EmployerDtoOut get(Integer id) {
       Employer employer = this.employerRepository.findById(id)
         .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "employer not found"));

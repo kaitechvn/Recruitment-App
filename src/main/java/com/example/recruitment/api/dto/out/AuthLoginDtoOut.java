@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class AuthLoginDtoOut {
   private String message;
   private String accessToken;
+  private String refreshToken;
 }

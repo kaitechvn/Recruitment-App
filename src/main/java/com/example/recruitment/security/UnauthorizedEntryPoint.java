@@ -18,8 +18,12 @@ import java.io.IOException;
 
 @Component("customUnauthorizedEntryPoint")
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
+  private final SentryException sentryException;
+
   @Autowired
-  private SentryException sentryException;
+  public UnauthorizedEntryPoint(SentryException sentryException) {
+    this.sentryException = sentryException;
+  }
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
@@ -28,7 +32,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     CommonDtoOut res =  CommonDtoOut.builder()
       .errorCode(ErrorCode.UNAUTHORIZED)
       .statusCode(HttpStatus.UNAUTHORIZED.value())
-      .message(authException.getMessage())
+      .message("You need authorization token for this one")
       .build();
 
     // Convert the object to JSON

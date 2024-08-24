@@ -4,12 +4,13 @@ import com.example.recruitment.common.code.ErrorCode;
 import com.example.recruitment.common.exception.ApiException;
 import com.example.recruitment.api.entity.User;
 import com.example.recruitment.api.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 public class CustomDaoImpl implements UserDetailsService {
 

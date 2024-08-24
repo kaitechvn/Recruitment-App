@@ -18,6 +18,7 @@ import com.example.recruitment.api.repository.EmployerRepository;
 import com.example.recruitment.api.repository.FieldRepository;
 import com.example.recruitment.api.repository.JobRepository;
 import com.example.recruitment.api.repository.ProvinceRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
   private final JobRepository jobRepository;
@@ -37,18 +39,6 @@ public class JobServiceImpl implements JobService {
   private final FieldRepository fieldRepository;
   private final EmployerRepository employerRepository;
   private final JobMapper jobMapper = JobMapper.INSTANCE;
-
-  @Autowired
-  public JobServiceImpl(JobRepository jobRepository,
-                        ProvinceRepository provinceRepository,
-                        FieldRepository fieldRepository,
-                        EmployerRepository employerRepository
-  ) {
-    this.jobRepository = jobRepository;
-    this.provinceRepository = provinceRepository;
-    this.fieldRepository = fieldRepository;
-    this.employerRepository = employerRepository;
-  }
 
   @Override
   public JobDtoOut get(Integer id) {

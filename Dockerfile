@@ -4,6 +4,7 @@ WORKDIR /tmp/
 
 COPY .mvn/ /tmp/.mvn/
 COPY mvnw /tmp/
+COPY config /tmp/config
 COPY pom.xml /tmp/
 COPY src /tmp/src/
 
